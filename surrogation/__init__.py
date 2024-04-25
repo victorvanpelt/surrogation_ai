@@ -25,7 +25,8 @@ class Group(BaseGroup):
 
 class Player(BasePlayer):
     accept_instructions = models.BooleanField(blank=False, widget=widgets.CheckboxInput)
-    accept_character = models.BooleanField(blank=False, widget=widgets.CheckboxInput)
+    gen_check = models.IntegerField(blank=True, initial=0)
+    save_image = models.BooleanField(blank=True, widget=widgets.CheckboxInput)
     surrogation = models.StringField()
     measure_skill = models.StringField()
     avatar = models.StringField()
@@ -73,7 +74,8 @@ class Introduction(Page):
 class Choice(Page):
     form_model = 'player'
     form_fields = [
-        'accept_character',
+        'gen_check',
+        'save_image',
         'intelligence',
         'strength',
         'charisma',
@@ -82,8 +84,8 @@ class Choice(Page):
     ]
     # @staticmethod
     # def error_message(player: Player, value):
-    #     if value["strength"]+value["intelligence"]+value["charisma"]+value["agility"]+value["stamina"] != 100:
-    #         return 'Please ensure the total allocated points adds up to 100.'
+    #     if value["gen_check"] == 0:
+    #         return 'Please click "Generate!" to continue.'
 
 class Results(Page):
     pass

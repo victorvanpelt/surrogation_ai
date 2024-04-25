@@ -17,7 +17,7 @@
         {% formfield player.intelligence label="Intelligence" %}
         {% formfield player.charisma label="Charisma" %}
         <p>
-        <button type="button" class="btn btn-outline-primary" data-toggle="collapse" id="button" data-target="#demo">Generate!</button>
+        <button type="button" class="btn btn-outline-primary" data-toggle="collapse" id="button_gen">Generate!</button>
         <p></p>
     </div>
     <div class="column" style="float:right; width: 30%; margin-right: 15%;  position: relative;">
@@ -31,9 +31,12 @@
     <p></p>
     <div style="align: center;">
     <hr>
-    {% formfield player.accept_character label="I have finished creating my character and and would like to proceed." %}
+    {% formfield player.save_image label="I want to download the avatar I created." %}
     <p></p>
-    {% next_button %}
+    <input type="hidden" id="gen_check" name="gen_check" value="0">
+    <button type="button_next" class="btn btn-primary" id="button_next" onclick="finishedFunction()">
+        Next
+    </button>
     </div>
 {% endblock %}
 
@@ -47,7 +50,7 @@
     </script>
 
     <script>
-        $('#button').on('click', function() {
+        $('#button_gen').on('click', function() {
             var strength = $('input[name=strength]').val();
             var agility = $('input[name=agility]').val();
             var stamina = $('input[name=stamina]').val();
@@ -59,14 +62,28 @@
             intelligence = intelligence || "0";
             charisma = charisma || "0";
             var total = parseInt(strength) + parseInt(agility) + parseInt(stamina) + parseInt(intelligence) + parseInt(charisma);
-            var trait = strength + agility + stamina + intelligence + charisma;
 
             if (total == 100) {
-				$('#avatar').replaceWith('<object width="300" height="300" style="-ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar"  data="https://api.dicebear.com/8.x/pixel-art/svg?' + 'seed=' + strength +'" type="image/svg+xml"></object>');
-			} else {
-				window.alert("Please ensure the total allocated points adds up to 100.");
-			}
-        });
+                $('#avatar').replaceWith('<object width="300" height="300" style="-ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar"  data="https://api.dicebear.com/8.x/pixel-art/svg?' + 'seed=' + strength + '" type="image/svg+xml"></object>');
+                // $('#gen_check').val(1);
+                document.getElementById('gen_check').value = 1;
+            } else {
+                window.alert("Please ensure the total allocated points adds up to 100.");
+            }
+        })
+
     </script>
 
+    <script>
+        $("#button_next").on("click", function(event) {
+            event.preventDefault ? event.preventDefault() : event.returnValue = false;
+
+            if ($("#gen_check").val() == 1) {
+                $("#FormId").submit();
+            }
+            else {
+                alert("Please click 'Generate!' to continue.");
+            }
+        });
+    </script>
 {% endblock %}
