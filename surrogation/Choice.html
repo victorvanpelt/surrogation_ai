@@ -1,0 +1,72 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Create Your Character
+{% endblock %}
+
+{% block content %}
+    Please create your character below. The total score must add up to 100.
+    <hr>
+    <div class="wrapper" style="overflow: hidden;">
+    <div class="column" style="float:left; text-align: left; width: 40%; margin-left: 1%;">
+        <p></p>
+        {% formfield player.strength label="Strength" %}
+        {% formfield player.agility label="Agility" %}
+        {% formfield player.stamina label="Stamina" %}
+        {% formfield player.intelligence label="Intelligence" %}
+        {% formfield player.charisma label="Charisma" %}
+        <p>
+        <button type="button" class="btn btn-outline-primary" data-toggle="collapse" id="button" data-target="#demo">Generate!</button>
+        <p></p>
+    </div>
+    <div class="column" style="float:right; width: 30%; margin-right: 15%;  position: relative;">
+        {% if player.avatar == "yes" %}
+
+            <img style="width:300px; height:300px; -ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar" src="{% static "surrogation/start.jpg" %}"/>
+
+        {% endif %}
+    </div>
+    </div>
+    <p></p>
+    <div style="align: center;">
+    <hr>
+    {% formfield player.accept_character label="I have finished creating my character and and would like to proceed." %}
+    <p></p>
+    {% next_button %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $('#id_agility').attr('autocomplete', 'off');
+        $('#id_strength').attr('autocomplete', 'off');
+        $('#id_stamina').attr('autocomplete', 'off');
+        $('#id_intelligence').attr('autocomplete', 'off');
+        $('#id_charisma').attr('autocomplete', 'off');
+    </script>
+
+    <script>
+        $('#button').on('click', function() {
+            var strength = $('input[name=strength]').val();
+            var agility = $('input[name=agility]').val();
+            var stamina = $('input[name=stamina]').val();
+            var intelligence = $('input[name=intelligence]').val();
+            var charisma = $('input[name=charisma]').val();
+            strength = strength || "0";
+            agility = agility || "0";
+            stamina = stamina || "0";
+            intelligence = intelligence || "0";
+            charisma = charisma || "0";
+            var total = parseInt(strength) + parseInt(agility) + parseInt(stamina) + parseInt(intelligence) + parseInt(charisma);
+            var trait = strength + agility + stamina + intelligence + charisma;
+
+            if (total == 100) {
+				$('#avatar').replaceWith('<object width="300" height="300" style="-ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar"  data="https://api.dicebear.com/8.x/pixel-art/svg?' + 'seed=' + strength +'" type="image/svg+xml"></object>');
+			} else {
+				window.alert("Please ensure the total allocated points adds up to 100.");
+			}
+        });
+    </script>
+
+{% endblock %}

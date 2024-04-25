@@ -1,0 +1,25 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+
+{% block title %}
+    Instructions
+{% endblock %}
+
+{% block content %}
+
+<div class="instructions" style="height: 135px;">
+    <p>
+        We ask you to generate a fictional character by distributing 100 skill points to five different skill dimensions.<br>
+        There is no difference in the importance of between different skill dimensions.<br>
+        Also, you are free to distribute the 100 skill points any way you would like.<br>
+        {% if player.surrogation == "yes" %}
+            We are measuring how many skill points participants allocate to the {{ player.measure_skill }} of their character.<br>
+        {% endif %}
+    </p>
+</div>
+
+    {% formfield player.accept_instructions label="I have read the information above and would like to start." %}
+    <p></p>
+    {% next_button %}
+
+{% endblock %}
