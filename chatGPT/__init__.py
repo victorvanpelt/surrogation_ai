@@ -77,7 +77,6 @@ def creating_session(subsession: Subsession):
     players = subsession.get_players()
 
     # randomize character prompt and save to player var
-    expConditions = ['A', 'B']
     for p in players:
         if p.session.config['prompt'] == "A":
             p.condition = "A"
@@ -93,7 +92,7 @@ def creating_session(subsession: Subsession):
 
 
         # set prompt based on condition
-        if rExp == 'A':
+        if p.condition == 'A':
             p.msg = json.dumps([{"role": "system", "content": C.CHARACTER_PROMPT_A}])
         else:
             p.msg = json.dumps([{"role": "system", "content": C.CHARACTER_PROMPT_B}])
