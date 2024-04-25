@@ -40,19 +40,19 @@ class Player(BasePlayer):
 def creating_session(subsession: Subsession):
     # randomize to treatments
     # Now always set to surrotation treatment
+    treats = itertools.cycle(['yes', 'no'])
+    skill_focus = itertools.cycle(['Intelligence', 'Strength', 'Charisma', 'Agility', 'Stamina'])
     for player in subsession.get_players():
         if player.session.config['surrogation'] == 1:
             player.surrogation = 'yes'
         elif player.session.config['surrogation'] == 0:
             player.surrogation = 'no'
         else:
-            treats = itertools.cycle(['yes', 'no'])
             player.surrogation = next(treats)
         print('set player.surrogation to', player.surrogation)
 
         # set skill
         if player.surrogation == 'yes':
-            skill_focus = itertools.cycle(['Intelligence', 'Strength', 'Charisma', 'Agility', 'Stamina'])
             player.measure_skill = next(skill_focus)
             print('set player.measure_skill to', player.measure_skill)
 

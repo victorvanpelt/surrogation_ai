@@ -77,6 +77,7 @@ def creating_session(subsession: Subsession):
     players = subsession.get_players()
 
     # randomize character prompt and save to player var
+    expConditions = itertools.cycle(['A', 'B'])
     for p in players:
         if p.session.config['prompt'] == "A":
             p.condition = "A"
@@ -85,7 +86,6 @@ def creating_session(subsession: Subsession):
             p.condition = "B"
             p.participant.vars['condition'] = "B"
         else:
-            expConditions = itertools.cycle(['A', 'B'])
             p.condition = next(expConditions)
             p.participant.vars['condition'] = p.condition
         print('set player.condition to', p.condition)
