@@ -31,7 +31,7 @@
     <p></p>
     <div style="align: center;">
     <hr>
-    {% formfield player.save_image label="I want to download the avatar I created." %}
+    {% formfield player.save_image label="I want to download and keep the avatar I created." %}
     <p></p>
     <input type="hidden" id="gen_check" name="gen_check" value="0">
     <button type="button_next" class="btn btn-primary" id="button_next" onclick="finishedFunction()">
@@ -61,10 +61,11 @@
             stamina = stamina || "0";
             intelligence = intelligence || "0";
             charisma = charisma || "0";
+            var seed = strength + agility + stamina + intelligence + charisma
             var total = parseInt(strength) + parseInt(agility) + parseInt(stamina) + parseInt(intelligence) + parseInt(charisma);
 
             if (total == 100) {
-                $('#avatar').replaceWith('<object width="300" height="300" style="-ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar"  data="https://api.dicebear.com/8.x/pixel-art/svg?' + 'seed=' + strength + '" type="image/svg+xml"></object>');
+                $('#avatar').replaceWith('<object width="300" height="300" style="-ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar"  data="https://api.dicebear.com/8.x/pixel-art/svg?' + 'seed=' + seed + '" type="image/svg+xml"></object>');
                 document.getElementById('gen_check').value = 1;
             } else {
                 window.alert("Please ensure the total allocated points adds up to 100.");
@@ -78,6 +79,30 @@
             event.preventDefault ? event.preventDefault() : event.returnValue = false;
 
             if ($("#gen_check").val() == 1) {
+                if ($("#save_image").val() == 1) {
+                    const svgUrl = document.getElementById('avatar').data;
+                    fetch(svgUrl)
+                    .then(response => response.blob()) // Convert to blob
+                    .then(blob => {
+                    // Create a URL for the blob
+                    const blobUrl = URL.createObjectURL(blob);
+
+                    // Create a temporary download link
+                    const downloadLink = document.createElement('a');
+                    downloadLink.href = blobUrl;
+                    downloadLink.download = 'avatar.svg'; // Set the download filename
+
+                    // Append to the document, click it, and then remove it
+                    document.body.appendChild(downloadLink);
+                    downloadLink.click();
+                    document.body.removeChild(downloadLink);
+
+                    // Optional: Revoke the blob URL after some delay
+                    setTimeout(() => URL.revokeObjectURL(blobUrl), 100);
+                })
+                .catch(error => console.error('Error downloading the SVG:', error));
+                }
+                
                 document.forms[0].submit();
                 $('#form').submit();
             }
