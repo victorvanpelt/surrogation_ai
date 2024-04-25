@@ -1,7 +1,7 @@
 from otree.api import *
 from os import environ
 from openai import OpenAI
-import random
+import itertools
 import json
 
 from datetime import datetime
@@ -79,9 +79,18 @@ def creating_session(subsession: Subsession):
     # randomize character prompt and save to player var
     expConditions = ['A', 'B']
     for p in players:
-        rExp = random.choice(expConditions)
-        p.condition = rExp
-        p.participant.vars['condition'] = rExp
+        if p.session.config['prompt'] == "A":
+            p.condition = "A"
+            p.participant.vars['condition'] = "A"
+        elif p.session.config['prompt'] == "B":
+            p.condition = "A"
+            p.participant.vars['condition'] = "A"
+        else:
+            expConditions = itertools.cycle(['A', 'B'])
+            p.condition = next(expConditions)
+            p.participant.vars['condition'] = p.condition
+        print('set player.condition to', p.condition)
+
 
         # set prompt based on condition
         if rExp == 'A':

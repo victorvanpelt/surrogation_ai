@@ -1,4 +1,4 @@
-import random, itertools
+import itertools
 
 from otree.api import *
 
@@ -80,6 +80,10 @@ class Choice(Page):
         'agility',
         'stamina',
     ]
+    # @staticmethod
+    # def error_message(player: Player, value):
+    #     if value["strength"]+value["intelligence"]+value["charisma"]+value["agility"]+value["stamina"] != 100:
+    #         return 'Please ensure the total allocated points adds up to 100.'
 
 class Results(Page):
     pass

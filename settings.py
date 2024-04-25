@@ -5,7 +5,8 @@ SESSION_CONFIGS = [
      dict(
          name='chatGPT',
          app_sequence=['chatGPT',],
-         num_demo_participants=1,
+         num_demo_participants=2,
+         prompt=""
      ),
     dict(
         name='Surrogation',
