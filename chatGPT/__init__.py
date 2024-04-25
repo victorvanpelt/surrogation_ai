@@ -150,7 +150,7 @@ class Introduction(Page):
     form_model = 'player'
     form_fields = ['accept_instructions']
 
-class Chat(Page):
+class Talk(Page):
     form_model = 'player'
     form_fields = ['chatLog']
     timeout_seconds = 120
@@ -195,5 +195,5 @@ class Chat(Page):
 
 page_sequence = [
     Introduction,
-    Chat,
+    Talk,
 ]
