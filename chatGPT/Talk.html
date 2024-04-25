@@ -4,7 +4,60 @@
 {{ endblock }}
 
 {{ block scripts }}
+    <style>
+        .textBox {
+        background: white;
+        /* border-color: lightgrey;
+        border-style: solid; */
+        border: 2px solid lightgrey;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        height: 50vh;
+        position:relative;
+        overflow:auto;
+        }
 
+  .inputBox {
+    display: flex;
+    align-items: center;
+    margin-top: 1rem;
+  }
+
+  .typeInputBox {
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+
+    /* -------------------- text span styles -------------------- */
+
+  .selfText {
+    background: lightgray;
+    display: inline-block;
+    position: relative;
+    left: 100%;
+    transform: translateX(-100%);
+    text-align: right;
+    margin-bottom: 5px;
+    padding: 10px 10px 10px 12px;
+    border-radius: 20px;
+    max-width: 80%;
+    height: 100%;
+  }
+
+  .botText {
+    background: #38A1F3;
+    color: white;
+    left: 0;
+    display: inline-block;
+    margin-bottom: 5px;
+    padding: 10px 10px 10px 12px;
+    border-radius: 20px;
+    max-width: 80%;
+    height: 100%;
+  }
+
+    </style>
     <script>
         // list of chat messages as JSON dictionaries
         var chatLogData = [];
@@ -91,25 +144,12 @@
 
 {{ block content }}
 
-    <!-- oTree timer -->
-    <p align="center">
-        Page will auto-advance in:
-        <span style="color:red; font-weight: bold">
-            <span class="otree-timer__time-left"></span>
-        </span>
-        <br>
-    <button class="btn btn-primary btn-large">
-        Next Page
-    </button>
-    
-    </p>
-    
     <!-- div displaying chat messages -->
     <div class="textBox">
         <div id="chat_messages">
         </div>
     </div>
-    
+    <p></p>
     <!-- text input -->
     <div class="inputBox">
         <div class="typeInputBox">
@@ -117,7 +157,13 @@
             <button type="button" onclick="sendMsg()">Send</button>
         </div>
     </div>
-    
+    <p></p>
+    <p align="center">
+    <button class="btn btn-primary btn-large">
+        Next Page
+    </button>
+    </p>
+
     <!-- hidden input to save chat log -->
     <input type='hidden' name='chatLog' value='' id='id_chatLog'/>
         
