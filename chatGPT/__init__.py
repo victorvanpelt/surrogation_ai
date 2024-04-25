@@ -82,8 +82,8 @@ def creating_session(subsession: Subsession):
             p.condition = "A"
             p.participant.vars['condition'] = "A"
         elif p.session.config['prompt'] == "B":
-            p.condition = "A"
-            p.participant.vars['condition'] = "A"
+            p.condition = "B"
+            p.participant.vars['condition'] = "B"
         else:
             expConditions = itertools.cycle(['A', 'B'])
             p.condition = next(expConditions)
