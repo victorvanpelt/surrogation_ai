@@ -10,7 +10,7 @@ SESSION_CONFIGS = [
     dict(
         name='Surrogation',
         app_sequence=['surrogation', ],
-        num_demo_participants=1,
+        num_demo_participants=2,
     )
 ]
 # if you set a property in SESSION_CONFIG_DEFAULTS, it will be inherited by all configs

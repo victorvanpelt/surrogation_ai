@@ -1,0 +1,29 @@
+{{ extends "global/Page.html" }}
+
+{{ block title }}
+    Introduction
+{{ endblock }}
+
+{{ block scripts }}
+{{ endblock }}
+
+
+{{ block content }}
+
+<div class="card card-body bg-light instructions">
+    <ul>
+        <li>On the next page, you will be randomly assigned to speak for a couple minutes with either a southern basketball fan or a snooty New Yorker.
+        <li>Both will attempt to steer the conversation back to basketball or art, respectively.</li>
+    </ul>
+</div>
+<br><br>
+{% formfield player.accept_instructions label="I have read the information above and would like to start." %}
+<p></p>
+{% next_button %}
+
+
+{{ endblock }}
+
+
+
+

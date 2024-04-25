@@ -104,6 +104,7 @@ class Player(BasePlayer):
     # input data for gpt
     msg = models.LongStringField(blank=True)
 
+    accept_instructions = models.BooleanField(blank=False, widget=widgets.CheckboxInput)
 
 # custom export of chatLog
 def custom_export(players):
@@ -145,8 +146,9 @@ def runGPT(inputMessage):
         return None
 
 # PAGES
-class intro(Page):
-    pass
+class Introduction(Page):
+    form_model = 'player'
+    form_fields = ['accept_instructions']
 
 class chat(Page):
     form_model = 'player'

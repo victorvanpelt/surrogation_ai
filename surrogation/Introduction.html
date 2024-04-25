@@ -7,15 +7,16 @@
 
 {% block content %}
 
-<div class="instructions" style="height: 135px;">
-    <p>
-        We ask you to generate a fictional character by distributing 100 skill points to five different skill dimensions.<br>
-        There is no difference in the importance of between different skill dimensions.<br>
-        Also, you are free to distribute the 100 skill points any way you would like.<br>
-        {% if player.surrogation == "yes" %}
-            We are measuring how many skill points participants allocate to the {{ player.measure_skill }} of their character.<br>
-        {% endif %}
-    </p>
+<div class="card card-body bg-light instructions">
+        <ul>
+            <li>Your taks is to generate an avatar picture by distributing 100 skill points to five different skill dimensions.</li>
+            <li>You are free to distribute the 100 skill points any way you would like.</li>
+            <li>There is no difference in the relative importance of between different skill dimensions.</li>
+            <li>However, each of the skills will equally affect the avatar picture.</li>
+            {% if player.surrogation == "yes" %}
+                <li>We are measuring how many skill points participants allocate to the {{ player.measure_skill }} of their character.</li>>
+            {% endif %}
+        </ul>
 </div>
 
     {% formfield player.accept_instructions label="I have read the information above and would like to start." %}

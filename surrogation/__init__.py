@@ -1,4 +1,4 @@
-import random
+import random, itertools
 
 from otree.api import *
 
@@ -29,19 +29,11 @@ class Player(BasePlayer):
     surrogation = models.StringField()
     measure_skill = models.StringField()
     avatar = models.StringField()
-    # Traits
-    # intelligence = models.FloatField(
-    # widget=widgets.SliderInput(attrs={'step': '1', 'style': 'width:500px'}, show_value=True),
-    # min=0,
-    # initial=None,
-    # max=100,
-    # )
     intelligence = models.IntegerField(blank=True)
     strength = models.IntegerField(blank=True)
     charisma = models.IntegerField(blank=True)
     agility = models.IntegerField(blank=True)
     stamina = models.IntegerField(blank=True)
-    # gender = models.IntegerField(blank=False, choices=[[1, 'Male'], [2, 'Female']])
 
 
 # FUNCTIONS
@@ -49,15 +41,21 @@ def creating_session(subsession: Subsession):
     # randomize to treatments
     # Now always set to surrotation treatment
     for player in subsession.get_players():
-        # player.surrogation = random.choice(['yes', 'no'])
-        player.surrogation = 'yes'
+        if player.session.config['surrogation'] == 1:
+            player.surrogation = 'yes'
+        elif player.session.config['surrogation'] == 0:
+            player.surrogation = 'no'
+        else:
+            treats = itertools.cycle(['yes', 'no'])
+            player.surrogation = next(treats)
         print('set player.surrogation to', player.surrogation)
-        # Ranomly set measure if surrogation treatment
+
+        # set skill
         if player.surrogation == 'yes':
-            player.measure_skill = random.choice(
-                ['Intelligence', 'Strength', 'Charisma', 'Agility', 'Stamina']
-            )
+            skill_focus = itertools.cycle(['Intelligence', 'Strength', 'Charisma', 'Agility', 'Stamina'])
+            player.measure_skill = next(skill_focus)
             print('set player.measure_skill to', player.measure_skill)
+
     # randomize avatar condition
     # Now always set to avatar treatment
     for player in subsession.get_players():
@@ -68,7 +66,6 @@ def creating_session(subsession: Subsession):
 
 # PAGES
 class Introduction(Page):
-    pass
     form_model = 'player'
     form_fields = ['accept_instructions']
 
