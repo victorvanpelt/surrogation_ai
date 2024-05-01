@@ -11,30 +11,41 @@
     <div class="wrapper" style="overflow: hidden;">
     <div class="column" style="float:left; text-align: left; width: 40%; margin-left: 1%;">
         <p></p>
-        {% formfield player.strength label="Strength" %}
-        {% formfield player.agility label="Agility" %}
-        {% formfield player.stamina label="Stamina" %}
-        {% formfield player.intelligence label="Intelligence" %}
-        {% formfield player.charisma label="Charisma" %}
+        {% formfield player.accessory label="Accessory Score" %}
+        {% formfield player.facial_hair label="Facial Hair Score" %}
+        {% formfield player.eye_sight label="Eye Sight Score" %}
+        {% formfield player.headgear label="Head Gear Score" %}
         <p>
-        <button type="button" class="btn btn-outline-primary" data-toggle="collapse" id="button_gen">Generate!</button>
         <p></p>
     </div>
     <div class="column" style="float:right; width: 30%; margin-right: 15%;  position: relative;">
         {% if player.avatar == "yes" %}
 
-            <img style="width:300px; height:300px; -ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar" src="{% static "surrogation/start.jpg" %}"/>
-
+            <img style="width:275px; height:275px; -ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar" src="{% static "surrogation/start.jpg" %}"/>
+        <p></p>
         {% endif %}
+        </div>
+    </div>
+    <p></p>
+    <div class="wrapper" style="overflow: hidden;">
+    <div class="column" style="float:left; text-align: left; width: 40%; margin-left: 1%;: center">
+                <button type="button" class="btn btn-outline-primary" data-toggle="collapse" id="button_up">Update Features</button>
+        <p></p>
+    </div>
+    <div class="column" style="float:right; width: 30%; margin-right: 11%;  position: relative;">
+        <button type="button" class="btn btn-outline-primary" data-toggle="collapse" id="button_gen">Randomize Character</button>
     </div>
     </div>
+
+
     <p></p>
     <div style="align: center;">
     <hr>
     {% formfield player.save_image label="I want to download and keep the avatar I created." %}
     <p></p>
+    <input type="hidden" id="seed" name="seed" value="0">
     <input type="hidden" id="gen_check" name="gen_check" value="0">
-    <button type="button_next" class="btn btn-primary" id="button_next" onclick="finishedFunction()">
+    <button type="button_next" class="btn btn-primary" id="button_next">
         Next
     </button>
     </div>
@@ -42,31 +53,31 @@
 
 {% block scripts %}
     <script>
-        $('#id_agility').attr('autocomplete', 'off');
-        $('#id_strength').attr('autocomplete', 'off');
-        $('#id_stamina').attr('autocomplete', 'off');
-        $('#id_intelligence').attr('autocomplete', 'off');
-        $('#id_charisma').attr('autocomplete', 'off');
+        $('#id_accessory').attr('autocomplete', 'off');
+        $('#id_facial_hair').attr('autocomplete', 'off');
+        $('#id_eye_sight').attr('autocomplete', 'off');
+        $('#id_headgear').attr('autocomplete', 'off');
     </script>
 
     <script>
         $('#button_gen').on('click', function() {
-            var strength = $('input[name=strength]').val();
-            var agility = $('input[name=agility]').val();
-            var stamina = $('input[name=stamina]').val();
-            var intelligence = $('input[name=intelligence]').val();
-            var charisma = $('input[name=charisma]').val();
-            strength = strength || "0";
-            agility = agility || "0";
-            stamina = stamina || "0";
-            intelligence = intelligence || "0";
-            charisma = charisma || "0";
-            var seed = strength + agility + stamina + intelligence + charisma
-            var total = parseInt(strength) + parseInt(agility) + parseInt(stamina) + parseInt(intelligence) + parseInt(charisma);
+            var accessory = $('input[name=accessory]').val();
+            var facial_hair = $('input[name=facial_hair]').val();
+            var eye_sight = $('input[name=eye_sight]').val();
+            var headgear = $('input[name=headgear]').val();
+            accessory = accessory || "0";
+            facial_hair = facial_hair || "0";
+            eye_sight = eye_sight || "0";
+            headgear = headgear || "0";
+            let max = 10000;
+            let seed = Math.floor(Math.random() * max);
+            var total = parseInt(accessory) + parseInt(facial_hair) + parseInt(eye_sight) + parseInt(headgear);
 
             if (total == 100) {
-                $('#avatar').replaceWith('<object width="300" height="300" style="-ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar"  data="https://api.dicebear.com/8.x/pixel-art/svg?' + 'seed=' + seed + '" type="image/svg+xml"></object>');
+                $('#avatar').replaceWith('<object width="300" height="300" style="-ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar"  data="https://api.dicebear.com/8.x/pixel-art/svg?' + 'seed=' + seed + '&accessoriesProbability=' + accessory + '&beardProbability=' + facial_hair + '&glassesProbability=' + ((-1 * eye_sight) + 100) + '&hatProbability=' + headgear + '" type="image/svg+xml"></object>');
                 document.getElementById('gen_check').value = 1;
+                document.getElementById('seed').value = seed;
+
             } else {
                 window.alert("Please ensure the total allocated points adds up to 100.");
             }
@@ -75,11 +86,35 @@
     </script>
 
     <script>
-        $("#button_next").on("click", function(event) {
+        $('#button_up').on('click', function() {
+            var accessory = $('input[name=accessory]').val();
+            var facial_hair = $('input[name=facial_hair]').val();
+            var eye_sight = $('input[name=eye_sight]').val();
+            var headgear = $('input[name=headgear]').val();
+            accessory = accessory || "0";
+            facial_hair = facial_hair || "0";
+            eye_sight = eye_sight || "0";
+            headgear = headgear || "0";
+            var seed = $('input[name=seed]').val();
+            var total = parseInt(accessory) + parseInt(facial_hair) + parseInt(eye_sight) + parseInt(headgear);
+
+            if (total == 100) {
+                $('#avatar').replaceWith('<object width="300" height="300" style="-ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar"  data="https://api.dicebear.com/8.x/pixel-art/svg?' + 'seed=' + seed + '&accessoriesProbability=' + accessory + '&beardProbability=' + facial_hair + '&glassesProbability=' + ((-1 * eye_sight) + 100) + '&hatProbability=' + headgear + '" type="image/svg+xml"></object>');
+                document.getElementById('gen_check').value = 1;
+
+            } else {
+                window.alert("Please ensure the total score for the features adds up to 100.");
+            }
+        })
+
+    </script>
+
+    <script>
+        $('#button_next').on('click', function(event) {
             event.preventDefault ? event.preventDefault() : event.returnValue = false;
 
-            if ($("#gen_check").val() == 1) {
-                if ($("#save_image").val() == 1) {
+            if ($('#gen_check').val() == 1) {
+                if ($('#save_image').val() == true) {
                     const svgUrl = document.getElementById('avatar').data;
                     fetch(svgUrl)
                     .then(response => response.blob()) // Convert to blob
@@ -103,11 +138,11 @@
                 .catch(error => console.error('Error downloading the SVG:', error));
                 }
 
-                document.forms[0].submit();
-                $('#form').submit();
+                // document.forms[0].submit();
+                // $('#form').submit();
             }
             else {
-                alert("Please click 'Generate!' to continue.");
+                alert("Please generate a character to continue.");
             }
         });
     </script>

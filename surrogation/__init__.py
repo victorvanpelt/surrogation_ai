@@ -30,19 +30,24 @@ class Player(BasePlayer):
     surrogation = models.StringField()
     measure_skill = models.StringField()
     avatar = models.StringField()
-    intelligence = models.IntegerField(blank=True)
-    strength = models.IntegerField(blank=True)
-    charisma = models.IntegerField(blank=True)
-    agility = models.IntegerField(blank=True)
-    stamina = models.IntegerField(blank=True)
+    seed = models.IntegerField()
 
+    #features
+    accessory = models.IntegerField(blank=True)
+    facial_hair = models.IntegerField(blank=True)
+    eye_sight = models.IntegerField(blank=True)
+    headgear = models.IntegerField(blank=True)
+
+    # radius = models.IntegerField(blank=True)
+    # size = models.IntegerField(blank=True)
+    # scale = models.IntegerField(blank=True)
 
 # FUNCTIONS
 def creating_session(subsession: Subsession):
     # randomize to treatments
     # Now always set to surrotation treatment
     treats = itertools.cycle(['yes', 'no'])
-    skill_focus = itertools.cycle(['Intelligence', 'Strength', 'Charisma', 'Agility', 'Stamina'])
+    skill_focus = itertools.cycle(['Accessory', 'Facial Hair', 'Eye Sight', 'Head Gear',])
     for player in subsession.get_players():
         if player.session.config['surrogation'] == 1:
             player.surrogation = 'yes'
@@ -75,12 +80,12 @@ class Choice(Page):
     form_model = 'player'
     form_fields = [
         'gen_check',
+        'seed',
         'save_image',
-        'intelligence',
-        'strength',
-        'charisma',
-        'agility',
-        'stamina',
+        'accessory',
+        'facial_hair',
+        'eye_sight',
+        'headgear',
     ]
     # @staticmethod
     # def error_message(player: Player, value):
