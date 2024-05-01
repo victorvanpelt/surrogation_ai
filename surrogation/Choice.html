@@ -114,32 +114,22 @@
             event.preventDefault ? event.preventDefault() : event.returnValue = false;
 
             if ($('#gen_check').val() == 1) {
-                if ($('#save_image').val() == true) {
-                    const svgUrl = document.getElementById('avatar').data;
-                    fetch(svgUrl)
-                    .then(response => response.blob()) // Convert to blob
-                    .then(blob => {
-                    // Create a URL for the blob
-                    const blobUrl = URL.createObjectURL(blob);
+                if ($('#id_save_image').is(':checked')) {
+                const svgElement = document.getElementById('avatar');
+                const serializer = new XMLSerializer();
+                const svgBlob = new Blob([serializer.serializeToString(svgElement)], {type: 'image/svg+xml'});
+                const blobUrl = URL.createObjectURL(svgBlob);
 
-                    // Create a temporary download link
-                    const downloadLink = document.createElement('a');
-                    downloadLink.href = blobUrl;
-                    downloadLink.download = 'avatar.svg'; // Set the download filename
-
-                    // Append to the document, click it, and then remove it
-                    document.body.appendChild(downloadLink);
-                    downloadLink.click();
-                    document.body.removeChild(downloadLink);
-
-                    // Optional: Revoke the blob URL after some delay
-                    setTimeout(() => URL.revokeObjectURL(blobUrl), 100);
-                })
-                .catch(error => console.error('Error downloading the SVG:', error));
+                const downloadLink = document.createElement('a');
+                downloadLink.href = blobUrl;
+                downloadLink.download = 'avatar.svg'; // Set the download filename
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
                 }
 
-                // document.forms[0].submit();
-                // $('#form').submit();
+                document.forms[0].submit();
+                $('#form').submit();
             }
             else {
                 alert("Please generate a character to continue.");
