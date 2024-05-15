@@ -6,15 +6,15 @@
 {% endblock %}
 
 {% block content %}
-    Please create your character below. The total score must add up to 100.
+    Please create your character below. You can distribute 100 points to four different attributes. Distributing points to an attribute increases the importance of that attribute. The total attributed points must add up to 100.
     <hr>
     <div class="wrapper" style="overflow: hidden;">
     <div class="column" style="float:left; text-align: left; width: 40%; margin-left: 1%;">
         <p></p>
-        {% formfield player.accessory label="Accessory Score" %}
-        {% formfield player.facial_hair label="Facial Hair Score" %}
-        {% formfield player.eye_sight label="Eye Sight Score" %}
-        {% formfield player.headgear label="Head Gear Score" %}
+        {% formfield player.accessory label="Accessories" %}
+        {% formfield player.facial_hair label="Facial Hair" %}
+        {% formfield player.eye_sight label="Eye Sight" %}
+        {% formfield player.headgear label="Head Gear" %}
         <p>
         <p></p>
     </div>
@@ -74,7 +74,7 @@
             var total = parseInt(accessory) + parseInt(facial_hair) + parseInt(eye_sight) + parseInt(headgear);
 
             if (total == 100) {
-                $('#avatar').replaceWith('<object width="300" height="300" style="-ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar"  data="https://api.dicebear.com/8.x/pixel-art/svg?' + 'seed=' + seed + '&accessoriesProbability=' + accessory + '&beardProbability=' + facial_hair + '&glassesProbability=' + ((-1 * eye_sight) + 100) + '&hatProbability=' + headgear + '" type="image/svg+xml"></object>');
+                $('#avatar').replaceWith('<object width="250" height="250" style="-ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar"  data="https://api.dicebear.com/8.x/pixel-art/svg?' + 'seed=' + seed + '&accessoriesProbability=' + accessory + '&beardProbability=' + facial_hair + '&glassesProbability=' + ((-1 * eye_sight) + 100) + '&hatProbability=' + headgear + '" type="image/svg+xml"></object>');
                 document.getElementById('gen_check').value = 1;
                 document.getElementById('seed').value = seed;
 
@@ -99,7 +99,7 @@
             var total = parseInt(accessory) + parseInt(facial_hair) + parseInt(eye_sight) + parseInt(headgear);
 
             if (total == 100) {
-                $('#avatar').replaceWith('<object width="300" height="300" style="-ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar"  data="https://api.dicebear.com/8.x/pixel-art/svg?' + 'seed=' + seed + '&accessoriesProbability=' + accessory + '&beardProbability=' + facial_hair + '&glassesProbability=' + ((-1 * eye_sight) + 100) + '&hatProbability=' + headgear + '" type="image/svg+xml"></object>');
+                $('#avatar').replaceWith('<object width="250" height="250" style="-ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar"  data="https://api.dicebear.com/8.x/pixel-art/svg?' + 'seed=' + seed + '&accessoriesProbability=' + accessory + '&beardProbability=' + facial_hair + '&glassesProbability=' + ((-1 * eye_sight) + 100) + '&hatProbability=' + headgear + '" type="image/svg+xml"></object>');
                 document.getElementById('gen_check').value = 1;
 
             } else {

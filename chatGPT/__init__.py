@@ -30,7 +30,7 @@ class C(BaseConstants):
     ## model
     ## this is which gpt model to use, which have different prices and ability
     ## https://platform.openai.com/docs/models
-    MODEL = "gpt-4"
+    MODEL = "gpt-4o"
 
     ## set character prompt for texas character
     ## according to openAI's documentation, this should be less than ~1500 words

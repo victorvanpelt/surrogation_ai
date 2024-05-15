@@ -47,7 +47,8 @@ def creating_session(subsession: Subsession):
     # randomize to treatments
     # Now always set to surrotation treatment
     treats = itertools.cycle(['yes', 'no'])
-    skill_focus = itertools.cycle(['Accessory', 'Facial Hair', 'Eye Sight', 'Head Gear',])
+    # skill_focus = itertools.cycle(['Accessory', 'Facial Hair', 'Eye Sight', 'Head Gear',])
+    skill_focus = itertools.cycle(['Accessory'])
     for player in subsession.get_players():
         if player.session.config['surrogation'] == 1:
             player.surrogation = 'yes'
