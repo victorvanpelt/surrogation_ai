@@ -2,19 +2,16 @@
 {% load staticfiles otree %}
 
 {% block title %}
-    Instructions
+    Instructions (2 of 2)
 {% endblock %}
 
 {% block content %}
 <p style="text-align: center;">
-<img style="width:275px; height:275px;" id="avatar" src="{% static "surrogation/logo.webp" %}"/>
+<img style="width:275px; height:275px;" id="avatar" src="{% static "surrogation/examples_art.jpg" %}"/>
 </p>
 
 <div class="card card-body bg-light instructions">
         <ul>
-            <li>Your task is to create a character for a mobile Pixel Art Game called "City Life".</li>
-            <li>This character will be the main playable character of the mobile game.</li>
-            <li>The primary goal is the make the character as appealing as possible to a large audience.</li>
             <li>You will be able to distribute 100 points to four different attributes of the character:</li>
             <ul>
                 <li>Accessories</li>
@@ -22,16 +19,20 @@
                 <li>Eye Sight</li>
                 <li>Head Gear</li>
             </ul>
-            <li>Distributing points to an attribute increases the importance of that particular attribute.</li>
+            <li>Distributing points to an attribute increases the importance of that particular attribute for your characters.</li>
             <li>Consumer research has shown that each of the four attributes have an equal impact on the character's appeal.</li>
             {% if player.surrogation == "yes" %}
                 <li>We are measuring how many points participants allocate to the {{ player.measure_skill }} Score of their character.</li>
             {% endif %}
         </ul>
 </div>
-    <p></p>
-    {% formfield player.accept_instructions label="I have read the information above and would like to start." %}
-    <p></p>
+    <p>
+        <b>Please evaluate the following statement.</b>
+    </p>
+    <p>
+        {% formfield player.Instr2 label="I can distribute 100 points to four different attributes." %}
+    </p>
+<br>
     {% next_button %}
 
 {% endblock %}

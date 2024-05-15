@@ -6,11 +6,12 @@
 {% endblock %}
 
 {% block content %}
-    Please create your character below. You can distribute 100 points to four different attributes. Distributing points to an attribute increases the importance of that attribute. The total attributed points must add up to 100.
+    Please create your character below.
     <hr>
     <div class="wrapper" style="overflow: hidden;">
     <div class="column" style="float:left; text-align: left; width: 40%; margin-left: 1%;">
-        <p></p>
+        {% formfield player.main_name label="Name" %}
+        <hr>
         {% formfield player.accessory label="Accessories" %}
         {% formfield player.facial_hair label="Facial Hair" %}
         {% formfield player.eye_sight label="Eye Sight" %}
@@ -122,7 +123,7 @@
 
                 const downloadLink = document.createElement('a');
                 downloadLink.href = blobUrl;
-                downloadLink.download = 'avatar.svg'; // Set the download filename
+                downloadLink.download = document.getElementById('id_main_name').value + '.svg'; // Set the download filename
                 document.body.appendChild(downloadLink);
                 downloadLink.click();
                 document.body.removeChild(downloadLink);

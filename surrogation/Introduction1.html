@@ -1,0 +1,30 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+
+{% block title %}
+    Instructions (1 of 2)
+{% endblock %}
+
+{% block content %}
+<p style="text-align: center;">
+<img style="width:275px; height:275px;" id="avatar" src="{% static "surrogation/logo.webp" %}"/>
+</p>
+
+<div class="card card-body bg-light instructions">
+        <ul>
+            <li>Your task is to create a playable character for a mobile Pixel Art Game called "City Life".</li>
+            <li>It is a puzzle and adventure game where players explore a vast city containing variety of non-playable characters (NPCs).</li>
+            <li>The playable character you will design will be the main playable character of the mobile game.</li>
+            <li>The primary goal is the make the character as appealing as possible to a large audience.</li>
+        </ul>
+</div>
+    <p>
+        <b>Please evaluate the following statement.</b>
+    </p>
+    <p>
+        {% formfield player.Instr1 label="My task is to create a playable character that is as appealing as possible to a large audience." %}
+    </p>
+<br>
+    {% next_button %}
+
+{% endblock %}

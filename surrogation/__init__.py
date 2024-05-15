@@ -24,13 +24,25 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
+    #instructions
     accept_instructions = models.BooleanField(blank=False, widget=widgets.CheckboxInput)
+    Instr1 = models.IntegerField(
+        choices=[[1, 'True'], [2, 'False']], widget=widgets.RadioSelect, blank=False
+    )
+    Instr2 = models.IntegerField(
+        choices=[[1, 'True'], [2, 'False']], widget=widgets.RadioSelect, blank=False
+    )
+
+
     gen_check = models.IntegerField(blank=True, initial=0)
     save_image = models.BooleanField(blank=True, widget=widgets.CheckboxInput)
     surrogation = models.StringField()
     measure_skill = models.StringField()
     avatar = models.StringField()
     seed = models.IntegerField()
+
+    #names
+    main_name = models.StringField(blank=False)
 
     #features
     accessory = models.IntegerField(blank=True)
@@ -72,14 +84,27 @@ def creating_session(subsession: Subsession):
 
 
 # PAGES
-class Introduction(Page):
+class Introduction1(Page):
     form_model = 'player'
-    form_fields = ['accept_instructions']
+    form_fields = ['Instr1']
 
+    def error_message(player: Player, value):
+        if value["Instr1"] != 1:
+            return 'Your answer is incorrect. Your task is to create a playable character that is as appealing as possible.'
+
+
+class Introduction2(Page):
+    form_model = 'player'
+    form_fields = ['Instr2']
+
+    def error_message(player: Player, value):
+        if value["Instr2"] != 1:
+            return 'Your answer is incorrect. You can distribute 100 points to four different attributes.'
 
 class Choice(Page):
     form_model = 'player'
     form_fields = [
+        'main_name',
         'gen_check',
         'seed',
         'save_image',
@@ -88,13 +113,9 @@ class Choice(Page):
         'eye_sight',
         'headgear',
     ]
-    # @staticmethod
-    # def error_message(player: Player, value):
-    #     if value["gen_check"] == 0:
-    #         return 'Please click "Generate!" to continue.'
 
 class Results(Page):
     pass
 
 
-page_sequence = [Introduction, Choice, Results]
+page_sequence = [Introduction1, Introduction2, Choice, Results]
