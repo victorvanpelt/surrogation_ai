@@ -5,16 +5,10 @@
     Create Your Character
 {% endblock %}
 
-{% block scripts %}
-{% endblock %}
-
 {% block content %}
-<div align="center">
-    <p>Please create your character below.</p>
-</div>
-<br>
-<hr>
-<div class="wrapper" style="overflow: hidden;">
+Please create your character below.
+    <hr>
+    <div class="wrapper" style="overflow: hidden;">
     <div class="column" style="float:left; text-align: left; width: 40%; margin-left: 1%;">
         {% formfield player.main_name label="Name" %}
         <hr>
@@ -22,38 +16,39 @@
         {% formfield player.facial_hair label="Facial Hair" %}
         {% formfield player.eye_sight label="Eye Sight" %}
         {% formfield player.headgear label="Head Gear" %}
+        <p>
         <p></p>
     </div>
     <div class="column" style="float:right; width: 30%; margin-right: 15%;  position: relative;">
-        {% if player.avatar == "yes" %}
             <img style="width:275px; height:275px; -ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar" src="{% static "surrogation/start.jpg" %}"/>
         <p></p>
-        {% endif %}
+        </div>
     </div>
-</div>
-<p></p>
-<div class="wrapper" style="overflow: hidden;">
+    <p></p>
+    <div class="wrapper" style="overflow: hidden;">
     <div class="column" style="float:left; text-align: left; width: 40%; margin-left: 1%;: center">
-        <button type="button" class="btn btn-outline-primary" data-toggle="collapse" id="button_up">Update Features</button>
+                <button type="button" class="btn btn-outline-primary" data-toggle="collapse" id="button_up">Update Features</button>
         <p></p>
     </div>
     <div class="column" style="float:right; width: 30%; margin-right: 11%;  position: relative;">
         <button type="button" class="btn btn-outline-primary" data-toggle="collapse" id="button_gen">Randomize Character</button>
     </div>
-</div>
-<p></p>
-<div style="align: center;">
+    </div>
+
+
+    <p></p>
+    <div style="align: center;">
     <hr>
     {% formfield player.save_image label="I want to download and keep the avatar I created." %}
     <p></p>
     <input type="hidden" id="seed" name="seed" value="0">
     <input type="hidden" id="gen_check" name="gen_check" value="0">
-    <input type='hidden' name='chatLog' value='' id='id_chatLog'/>
     <button type="button_next" class="btn btn-primary" id="button_next">
         Next
     </button>
-</div>
+    </div>
 {% endblock %}
+
 {% block scripts %}
     <script>
         $('#id_accessory').attr('autocomplete', 'off');
@@ -77,7 +72,7 @@
             var total = parseInt(accessory) + parseInt(facial_hair) + parseInt(eye_sight) + parseInt(headgear);
 
             if (total == 100) {
-                $('#avatar').replaceWith('<object width="250" height="250" style="-ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar"  data="https://api.dicebear.com/8.x/pixel-art/svg?' + 'seed=' + seed + '&accessoriesProbability=' + accessory + '&beardProbability=' + facial_hair + '&glassesProbability=' + ((-1 * eye_sight) + 100) + '&hatProbability=' + headgear + '" type="image/svg+xml"></object>');
+                $('#avatar').replaceWith('<img width="250" height="250" style="-ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar"  src="https://api.dicebear.com/8.x/pixel-art/svg?' + 'seed=' + seed + '&accessoriesProbability=' + accessory + '&beardProbability=' + facial_hair + '&glassesProbability=' + ((-1 * eye_sight) + 100) + '&hatProbability=' + headgear + '" type="image/svg+xml">');
                 document.getElementById('gen_check').value = 1;
                 document.getElementById('seed').value = seed;
 
@@ -102,7 +97,7 @@
             var total = parseInt(accessory) + parseInt(facial_hair) + parseInt(eye_sight) + parseInt(headgear);
 
             if (total == 100) {
-                $('#avatar').replaceWith('<object width="250" height="250" style="-ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar"  data="https://api.dicebear.com/8.x/pixel-art/svg?' + 'seed=' + seed + '&accessoriesProbability=' + accessory + '&beardProbability=' + facial_hair + '&glassesProbability=' + ((-1 * eye_sight) + 100) + '&hatProbability=' + headgear + '" type="image/svg+xml"></object>');
+                $('#avatar').replaceWith('<img width="250" height="250" style="-ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar"  src="https://api.dicebear.com/8.x/pixel-art/svg?' + 'seed=' + seed + '&accessoriesProbability=' + accessory + '&beardProbability=' + facial_hair + '&glassesProbability=' + ((-1 * eye_sight) + 100) + '&hatProbability=' + headgear + '" type="image/svg+xml">');
                 document.getElementById('gen_check').value = 1;
 
             } else {
