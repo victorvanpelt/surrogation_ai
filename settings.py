@@ -13,6 +13,13 @@ SESSION_CONFIGS = [
         app_sequence=['surrogation', ],
         num_demo_participants=2,
         surrogation="",
+    ),
+    dict(
+        name='dvstudy',
+        app_sequence=['dvstudy', ],
+        num_demo_participants=2,
+        surrogation="",
+        prompt="A"
     )
 ]
 # if you set a property in SESSION_CONFIG_DEFAULTS, it will be inherited by all configs
@@ -24,7 +31,7 @@ SESSION_CONFIG_DEFAULTS = dict(
     real_world_currency_per_point=1.00, participation_fee=0.00, doc=""
 )
 
-PARTICIPANT_FIELDS = []
+PARTICIPANT_FIELDS = ["condition", "ai_condition"]
 SESSION_FIELDS = []
 
 

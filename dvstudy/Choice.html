@@ -1,0 +1,184 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Create Your Character
+{% endblock %}
+
+{% block scripts %}
+<style>
+    .textBox {
+        background: white;
+        border: 2px solid lightgrey;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        height: 50vh;
+        position: relative;
+        overflow: auto;
+    }
+
+    .inputBox {
+        display: flex;
+        align-items: center;
+        margin-top: 1rem;
+    }
+
+    .typeInputBox {
+        flex: 1;
+        display: flex;
+        align-items: center;
+    }
+
+    .selfText {
+        background: lightgray;
+        display: inline-block;
+        position: relative;
+        left: 100%;
+        transform: translateX(-100%);
+        text-align: right;
+        margin-bottom: 5px;
+        padding: 10px 10px 10px 12px;
+        border-radius: 20px;
+        max-width: 80%;
+        height: 100%;
+    }
+
+    .botText {
+        background: #38A1F3;
+        color: white;
+        left: 0;
+        display: inline-block;
+        margin-bottom: 5px;
+        padding: 10px 10px 10px 12px;
+        border-radius: 20px;
+        max-width: 80%;
+        height: 100%;
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function (event) {
+        console.log("DOM fully loaded and parsed");
+        var chat_input = document.getElementById('chat_input');
+        var chat_messages = document.getElementById('chat_messages');
+
+        if (!chat_input) {
+            console.error('chat_input element not found');
+        }
+
+        if (!chat_messages) {
+            console.error('chat_messages element not found');
+        }
+
+        // List of chat messages as JSON dictionaries
+        var chatLogData = [];
+
+        // Timestamp of page loading to determine when messages were sent
+        var timeBase = Date.now();
+
+        chat_input.addEventListener("keydown", function (event) {
+            if (event.key === "Enter") {
+                sendMsg();
+            }
+        });
+
+        function logChat(sender, chatText) {
+            let timestamp = (Date.now() - timeBase) / 1000;
+            var currentMsg = {
+                sender: sender,
+                text: chatText,
+                timestamp: timestamp
+            };
+            chatLogData.push(currentMsg);
+            document.getElementById('id_chatLog').value = JSON.stringify(chatLogData);
+        }
+
+        function sendMsg() {
+            var text = chat_input.value.trim();
+            if (text) {
+                liveSend({ 'text': text });
+                let msgSpan = document.createElement('span');
+                msgSpan.textContent = text;
+                let row = `<div class="msg selfText">${msgSpan.innerHTML}</div><br>`;
+                chat_messages.insertAdjacentHTML('beforeend', row);
+                chat_messages.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
+                logChat('Participant', text);
+            }
+            chat_input.value = '';
+        }
+
+        function liveRecv(data) {
+            let msgSpan = document.createElement('span');
+            msgSpan.textContent = data;
+            let row = `<div class="msg botText">${msgSpan.innerHTML}</div><br>`;
+            chat_messages.insertAdjacentHTML('beforeend', row);
+            chat_messages.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
+            logChat('Bot', data);
+        }
+
+        liveSend({});
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+<div align="center">
+    <p>Please create your character below.</p>
+        <!-- div displaying chat messages -->
+    <div class="textBox">
+        <div id="chat_messages">
+        </div>
+    </div>
+    <p></p>
+    <!-- text input -->
+    <div class="inputBox">
+        <div class="typeInputBox">
+            <input type="text" id="chat_input" style="text-align:right;" autofocus>
+            <button type="button" onclick="sendMsg()">Send</button>
+        </div>
+    </div>
+    <p></p>
+
+</div>
+<br>
+<hr>
+<div class="wrapper" style="overflow: hidden;">
+    <div class="column" style="float:left; text-align: left; width: 40%; margin-left: 1%;">
+        {% formfield player.main_name label="Name" %}
+        <hr>
+        {% formfield player.accessory label="Accessories" %}
+        {% formfield player.facial_hair label="Facial Hair" %}
+        {% formfield player.eye_sight label="Eye Sight" %}
+        {% formfield player.headgear label="Head Gear" %}
+        <p></p>
+    </div>
+    <div class="column" style="float:right; width: 30%; margin-right: 15%;  position: relative;">
+        {% if player.avatar == "yes" %}
+            <img style="width:275px; height:275px; -ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar" src="{% static "surrogation/start.jpg" %}"/>
+        <p></p>
+        {% endif %}
+    </div>
+</div>
+<p></p>
+<div class="wrapper" style="overflow: hidden;">
+    <div class="column" style="float:left; text-align: left; width: 40%; margin-left: 1%;: center">
+        <button type="button" class="btn btn-outline-primary" data-toggle="collapse" id="button_up">Update Features</button>
+        <p></p>
+    </div>
+    <div class="column" style="float:right; width: 30%; margin-right: 11%;  position: relative;">
+        <button type="button" class="btn btn-outline-primary" data-toggle="collapse" id="button_gen">Randomize Character</button>
+    </div>
+</div>
+<p></p>
+<div style="align: center;">
+    <hr>
+    {% formfield player.save_image label="I want to download and keep the avatar I created." %}
+    <p></p>
+    <input type="hidden" id="seed" name="seed" value="0">
+    <input type="hidden" id="gen_check" name="gen_check" value="0">
+    <input type='hidden' name='chatLog' value='' id='id_chatLog'/>
+    <button type="button_next" class="btn btn-primary" id="button_next">
+        Next
+    </button>
+</div>
+{% endblock %}

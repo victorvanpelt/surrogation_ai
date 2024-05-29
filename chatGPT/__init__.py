@@ -9,7 +9,7 @@ client = OpenAI(
   api_key=environ.get('OPENAI_API_KEY'),
 )
 
-author = "Clint McKenna cmck@umich.edu"
+author = "Victor"
 
 doc = """
 a chatGPT interface for oTree
