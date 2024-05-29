@@ -38,7 +38,7 @@ class Player(BasePlayer):
     save_image = models.BooleanField(blank=True, widget=widgets.CheckboxInput)
     surrogation = models.StringField()
     measure_skill = models.StringField()
-    avatar = models.StringField()
+    # avatar = models.StringField()
     seed = models.IntegerField()
 
     #names
@@ -77,10 +77,10 @@ def creating_session(subsession: Subsession):
 
     # randomize avatar condition
     # Now always set to avatar treatment
-    for player in subsession.get_players():
-        # player.avatar = random.choice(['yes', 'no'])
-        player.avatar = 'yes'
-        print('set player.avatar to', player.avatar)
+    # for player in subsession.get_players():
+    #     # player.avatar = random.choice(['yes', 'no'])
+    #     player.avatar = 'yes'
+    #     print('set player.avatar to', player.avatar)
 
 
 # PAGES

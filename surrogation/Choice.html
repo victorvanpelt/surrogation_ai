@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block content %}
-    Please create your character below.
+Please create your character below.
     <hr>
     <div class="wrapper" style="overflow: hidden;">
     <div class="column" style="float:left; text-align: left; width: 40%; margin-left: 1%;">
@@ -20,11 +20,8 @@
         <p></p>
     </div>
     <div class="column" style="float:right; width: 30%; margin-right: 15%;  position: relative;">
-        {% if player.avatar == "yes" %}
-
             <img style="width:275px; height:275px; -ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar" src="{% static "surrogation/start.jpg" %}"/>
         <p></p>
-        {% endif %}
         </div>
     </div>
     <p></p>
@@ -75,7 +72,7 @@
             var total = parseInt(accessory) + parseInt(facial_hair) + parseInt(eye_sight) + parseInt(headgear);
 
             if (total == 100) {
-                $('#avatar').replaceWith('<object width="250" height="250" style="-ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar"  data="https://api.dicebear.com/8.x/pixel-art/svg?' + 'seed=' + seed + '&accessoriesProbability=' + accessory + '&beardProbability=' + facial_hair + '&glassesProbability=' + ((-1 * eye_sight) + 100) + '&hatProbability=' + headgear + '" type="image/svg+xml"></object>');
+                $('#avatar').replaceWith('<img width="250" height="250" style="-ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar"  src="https://api.dicebear.com/8.x/pixel-art/svg?' + 'seed=' + seed + '&accessoriesProbability=' + accessory + '&beardProbability=' + facial_hair + '&glassesProbability=' + ((-1 * eye_sight) + 100) + '&hatProbability=' + headgear + '" type="image/svg+xml">');
                 document.getElementById('gen_check').value = 1;
                 document.getElementById('seed').value = seed;
 
@@ -100,7 +97,7 @@
             var total = parseInt(accessory) + parseInt(facial_hair) + parseInt(eye_sight) + parseInt(headgear);
 
             if (total == 100) {
-                $('#avatar').replaceWith('<object width="250" height="250" style="-ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar"  data="https://api.dicebear.com/8.x/pixel-art/svg?' + 'seed=' + seed + '&accessoriesProbability=' + accessory + '&beardProbability=' + facial_hair + '&glassesProbability=' + ((-1 * eye_sight) + 100) + '&hatProbability=' + headgear + '" type="image/svg+xml"></object>');
+                $('#avatar').replaceWith('<img width="250" height="250" style="-ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar"  src="https://api.dicebear.com/8.x/pixel-art/svg?' + 'seed=' + seed + '&accessoriesProbability=' + accessory + '&beardProbability=' + facial_hair + '&glassesProbability=' + ((-1 * eye_sight) + 100) + '&hatProbability=' + headgear + '" type="image/svg+xml">');
                 document.getElementById('gen_check').value = 1;
 
             } else {
