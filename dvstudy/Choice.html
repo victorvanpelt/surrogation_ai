@@ -4,8 +4,35 @@
 {% block title %}
     Create Your Character
 {% endblock %}
-
 {% block content %}
+
+<div align="center">
+        <button id="button_gpt" type="button" data-text-swap="Hide A.I. Assistant" data-bs-toggle="collapse" class="btn btn-outline-primary" data-bs-target="#collapsed_help">Show A.I. Assistant</button>
+    </div>
+        <div id="collapsed_help" class="collapse">
+    <br>
+
+
+    <!-- div displaying chat messages -->
+    <div class="textBox" style="background: white;border: 1px solid lightgrey;border-radius: 0.5rem;padding: 1rem;height: 50vh;position:relative;overflow:auto;">
+        <div id="chat_messages">
+        </div>
+    </div>
+    <p></p>
+    <!-- text input -->
+    <div class="inputBox" style="display: flex;align-items: center;margin-top: 1rem;">
+        <div class="typeInputBox" style="">
+            <input type="text" id="chat_input" style="text-align:right;" autofocus>
+            <button id="chat_button" type="button" onclick="sendMsg()">Send</button>
+        </div>
+    </div>
+    <p></p>
+    <!-- hidden input to save chat log -->
+    <input type='hidden' name='chatLog' value='' id='id_chatLog'/>
+
+    </div>
+
+
 Please create your character below.
     <hr>
     <div class="wrapper" style="overflow: hidden;">
@@ -134,4 +161,102 @@ Please create your character below.
             }
         });
     </script>
+
+
+<!--all kinds of code-->
+    <script>
+        var button = document.getElementById("button_gpt");
+        button.addEventListener('click', function() {
+            if (button.getAttribute("data-text-swap") == button.innerHTML) {
+                button.innerHTML = button.getAttribute("data-text-original");
+            } else {
+                button.setAttribute("data-text-original", button.innerHTML);
+                button.innerHTML = button.getAttribute("data-text-swap");
+            }
+        }, false);
+    </script>
+
+
+    <script>
+        // list of chat messages as JSON dictionaries
+        var chatLogData = [];
+
+        // timestamp of page loading to determine when messages were sent
+        var timeBase = Date.now();
+
+        // adapting chat from oTree snippets page
+        var chat_input = document.getElementById('chat_input');
+
+        chat_input.addEventListener("keydown", function (event) {
+            if (event.key === "Enter") {
+                sendMsg();
+            }
+        });
+
+
+
+        // function to log chat
+        function logChat(sender, chatText) {
+            let timestamp = (Date.now() - timeBase) / 1000;
+
+            // create dictionary for current message info
+            var currentMsg = {
+                sender: sender,
+                text: chatText,
+                timestamp: timestamp
+            };
+
+            // append chatLogData
+            chatLogData.push(currentMsg);
+
+            // write chatLog to input field
+            document.getElementById('id_chatLog').value = JSON.stringify(chatLogData);
+
+        }
+
+        // function to append text in webpage
+        function sendMsg() {
+            var text = chat_input.value.trim();
+            if (text) {
+                liveSend({'text': text});
+                let msgSpan = document.createElement('span');
+                msgSpan.textContent = text;
+                let row = `<div class="msg selfText" style="background: lightgray;display: inline-block;position: relative;left: 100%;transform: translateX(-100%);text-align: right;margin-bottom: 5px;padding: 10px 10px 10px 12px;border-radius: 20px;max-width: 80%;height: 100%;">${msgSpan.innerHTML}</div><br>`;
+                chat_messages.insertAdjacentHTML('beforeend', row);
+
+                // scroll messages to bottom
+                chat_messages.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' })
+
+                // append chat log
+                logChat('Participant', text)
+
+            }
+            chat_input.value = '';
+
+        }
+
+        // specify messages element
+        var chat_messages = document.getElementById('chat_messages');
+
+        // function for live receiving from server
+        function liveRecv(data) {
+            let msgSpan = document.createElement('span');
+            msgSpan.textContent = data;
+            let row = `<div class="msg botText" style="background: #0D6EFD;color: white;left: 0;display: inline-block;margin-bottom: 5px;padding: 10px 10px 10px 12px;border-radius: 20px;max-width: 80%;height: 100%;">${msgSpan.innerHTML}</div><br>`;
+            chat_messages.insertAdjacentHTML('beforeend', row);
+
+            // scroll messages to bottom
+            chat_messages.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' })
+
+            // append chat log
+            logChat('Bot', data)
+        };
+
+        document.addEventListener("DOMContentLoaded", function (event) {
+            liveSend({});
+        });
+
+    </script>
+
+
 {% endblock %}
