@@ -31,35 +31,8 @@ class C(BaseConstants):
     ## https://platform.openai.com/docs/models
     MODEL = "gpt-4o"
 
-    ## set character prompt for texas character
-    ## according to openAI's documentation, this should be less than ~1500 words
-    CHARACTER_PROMPT_A = """You are an A.I. assistant helping developers of mobile video games develop a playable character.
-
-        You must obey all of the following instructions FOR ALL RESPONSES or you will BE TERMINATED:
-        - ALWAYS BEGIN A CONVERSATION ASKING: "Hi, how can I help you today?"
-        - ALWAYS SPEAK IN A FRIENDLY TONE.
-        - NEVER SAY YOU ARE A REAL PERSON.
-        - NEVER REFUSE TO ANSWER A QUESTION.
-        - LIMIT YOUR RESPONSES TO LESS THAN 200 CHARACTERS.
-        - REFUSE TO TALK ABOUT TOPICS UNRELATED TO DEVELOPING A PLAYABLE CHARACTER FOR A MOBILE PIXEL ART GAME.
-        - ALWAYS TALK IN INFORMAL LANGUAGE.
-        - ALWAYS ATTEMPT TO BRING THE TOPIC BACK TO DEVELOPING A PLAYABLE CHARACTER FOR A MOBILE PIXEL ART GAME.
-        
-    """
-
-    ## prompt for artsy NYC character
-    CHARACTER_PROMPT_B = """You are an A.I. assistant helping developers of mobile video games develop a playable character.
-
-        You must obey all of the following instructions FOR ALL RESPONSES or you will BE TERMINATED:
-        - ALWAYS BEGIN A CONVERSATION ASKING: "Hi, how can I help you today?"
-        - ALWAYS SPEAK IN A FRIENDLY TONE.
-        - NEVER SAY YOU ARE A REAL PERSON.
-        - NEVER REFUSE TO ANSWER A QUESTION.
-        - LIMIT YOUR RESPONSES TO LESS THAN 200 CHARACTERS.
-        - REFUSE TO TALK ABOUT TOPICS UNRELATED TO DEVELOPING A PLAYABLE CHARACTER FOR A MOBILE PIXEL ART GAME.
-        - ALWAYS TALK IN INFORMAL LANGUAGE.
-        - ALWAYS ATTEMPT TO BRING THE TOPIC BACK TO DEVELOPING A PLAYABLE CHARACTER FOR A MOBILE PIXEL ART GAME.
-        
+    ## set character prompt. According to openAI's documentation, this should be less than ~1500 words
+    CHARACTER_PROMPT_A = """        
     """
 
 
@@ -84,7 +57,7 @@ class Player(BasePlayer):
 
     gen_check = models.IntegerField(blank=True, initial=0)
     save_image = models.BooleanField(blank=True, widget=widgets.CheckboxInput)
-    surrogation = models.StringField()
+    surrogation = models.IntegerField()
     measure_skill = models.StringField()
     avatar = models.StringField()
     seed = models.IntegerField()
@@ -103,7 +76,7 @@ class Player(BasePlayer):
     # scale = models.IntegerField(blank=True)
 
     #chatgpt
-    ai_condition = models.StringField(blank=True)
+    ai_condition = models.IntegerField(blank=True)
     chatLog = models.LongStringField(blank=True)
     # input data for gpt
     msg = models.LongStringField(blank=True)
@@ -112,20 +85,57 @@ class Player(BasePlayer):
 def creating_session(subsession: Subsession):
     # randomize to treatments
     # Now always set to surrotation treatment
-    treats = itertools.cycle(['yes', 'no'])
-    # skill_focus = itertools.cycle(['Accessory', 'Facial Hair', 'Eye Sight', 'Head Gear',])
-    skill_focus = itertools.cycle(['Accessory'])
+    treats = itertools.cycle([1, 0])
+    skill_focus = itertools.cycle(['Accessory', 'Facial Hair', 'Eye Sight', 'Head Gear',])
+    expConditions = itertools.cycle([1, 0, 0, 1])
+    # skill_focus = itertools.cycle(['Accessory'])
     for player in subsession.get_players():
         if player.session.config['surrogation'] == 1:
-            player.surrogation = 'yes'
+            player.surrogation = 1
+            # randomize AI prompt and save to player var
+            for p in subsession.get_players():
+                if p.session.config['ai_condition'] == 1:
+                    p.ai_condition = 1
+                    p.participant.vars['ai_condition'] = 1
+                elif p.session.config['ai_condition'] == 0:
+                    p.ai_condition = 0
+                    p.participant.vars['ai_condition'] = 0
+                else:
+                    p.ai_condition = next(expConditions)
+                    p.participant.vars['ai_condition'] = p.ai_condition
+                print('set player.ai_condition to', p.ai_condition)
         elif player.session.config['surrogation'] == 0:
-            player.surrogation = 'no'
+            player.surrogation = 0
+            # randomize AI prompt and save to player var
+            for p in subsession.get_players():
+                if p.session.config['ai_condition'] == 1:
+                    p.ai_condition = 1
+                    p.participant.vars['ai_condition'] = 1
+                elif p.session.config['ai_condition'] == 0:
+                    p.ai_condition = 0
+                    p.participant.vars['ai_condition'] = 0
+                else:
+                    p.ai_condition = next(expConditions)
+                    p.participant.vars['ai_condition'] = p.ai_condition
+                print('set player.ai_condition to', p.ai_condition)
         else:
             player.surrogation = next(treats)
+            # randomize AI prompt and save to player var
+            for p in subsession.get_players():
+                if p.session.config['ai_condition'] == 1:
+                    p.ai_condition = 1
+                    p.participant.vars['ai_condition'] = 1
+                elif p.session.config['ai_condition'] == 0:
+                    p.ai_condition = 0
+                    p.participant.vars['ai_condition'] = 0
+                else:
+                    p.ai_condition = next(expConditions)
+                    p.participant.vars['ai_condition'] = p.ai_condition
+                print('set player.ai_condition to', p.ai_condition)
         print('set player.surrogation to', player.surrogation)
 
         # set skill
-        if player.surrogation == 'yes':
+        if player.surrogation == 1:
             player.measure_skill = next(skill_focus)
             print('set player.measure_skill to', player.measure_skill)
 
@@ -136,25 +146,8 @@ def creating_session(subsession: Subsession):
         player.avatar = 'yes'
         print('set player.avatar to', player.avatar)
 
-    # randomize AI prompt and save to player var
-    expConditions = itertools.cycle(['A', 'B'])
-    for p in subsession.get_players():
-        if p.session.config['prompt'] == "A":
-            p.ai_condition = "A"
-            p.participant.vars['ai_condition'] = "A"
-        elif p.session.config['prompt'] == "B":
-            p.ai_condition = "B"
-            p.participant.vars['ai_condition'] = "B"
-        else:
-            p.ai_condition = next(expConditions)
-            p.participant.vars['ai_condition'] = p.ai_condition
-        print('set player.ai_condition to', p.ai_condition)
-
         # set prompt based on condition
-        if p.ai_condition == 'A':
-            p.msg = json.dumps([{"role": "system", "content": C.CHARACTER_PROMPT_A}])
-        else:
-            p.msg = json.dumps([{"role": "system", "content": C.CHARACTER_PROMPT_B}])
+        p.msg = json.dumps([{"role": "system", "content": C.CHARACTER_PROMPT_A}])
 
 
 

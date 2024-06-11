@@ -5,9 +5,9 @@
     Create Your Character
 {% endblock %}
 {% block content %}
-
+            {% if player.ai_condition == 1 %}
 <div align="center">
-        <button id="button_gpt" type="button" data-text-swap="Hide A.I. Assistant" data-bs-toggle="collapse" class="btn btn-outline-primary" data-bs-target="#collapsed_help">Show A.I. Assistant</button>
+        <button id="button_gpt" type="button" data-text-swap="Hide ChatGPT" data-bs-toggle="collapse" class="btn btn-outline-primary" data-bs-target="#collapsed_help">Show ChatGPT</button>
     </div>
         <div id="collapsed_help" class="collapse">
     <br>
@@ -32,7 +32,7 @@
 
     </div>
 
-
+{% endif %}
 Please create your character below.
     <hr>
     <div class="wrapper" style="overflow: hidden;">
@@ -74,6 +74,8 @@ Please create your character below.
         Next
     </button>
     </div>
+
+
 {% endblock %}
 
 {% block scripts %}
