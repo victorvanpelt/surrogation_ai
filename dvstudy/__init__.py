@@ -87,51 +87,43 @@ def creating_session(subsession: Subsession):
     # Now always set to surrotation treatment
     treats = itertools.cycle([1, 0])
     skill_focus = itertools.cycle(['Accessory', 'Facial Hair', 'Eye Sight', 'Head Gear',])
-    expConditions = itertools.cycle([1, 0, 0, 1])
+    expConditions = itertools.cycle([1, 0])
     # skill_focus = itertools.cycle(['Accessory'])
     for player in subsession.get_players():
         if player.session.config['surrogation'] == 1:
-            player.surrogation = 1
+            player.surrogation = player.session.config['surrogation']
             # randomize AI prompt and save to player var
-            for p in subsession.get_players():
-                if p.session.config['ai_condition'] == 1:
-                    p.ai_condition = 1
-                    p.participant.vars['ai_condition'] = 1
-                elif p.session.config['ai_condition'] == 0:
-                    p.ai_condition = 0
-                    p.participant.vars['ai_condition'] = 0
+            for player in subsession.get_players():
+                if player.session.config['ai_condition'] != "":
+                    player.ai_condition = player.session.config['ai_condition']
                 else:
-                    p.ai_condition = next(expConditions)
-                    p.participant.vars['ai_condition'] = p.ai_condition
-                print('set player.ai_condition to', p.ai_condition)
+                    player.ai_condition = next(expConditions)
+                    player.participant.vars['ai_condition'] = player.ai_condition
+                print('set player.ai_condition to', player.ai_condition)
         elif player.session.config['surrogation'] == 0:
-            player.surrogation = 0
+            player.surrogation = player.session.config['surrogation']
             # randomize AI prompt and save to player var
-            for p in subsession.get_players():
-                if p.session.config['ai_condition'] == 1:
-                    p.ai_condition = 1
-                    p.participant.vars['ai_condition'] = 1
-                elif p.session.config['ai_condition'] == 0:
-                    p.ai_condition = 0
-                    p.participant.vars['ai_condition'] = 0
+            for player in subsession.get_players():
+                if player.session.config['ai_condition'] != "":
+                    player.ai_condition = player.session.config['ai_condition']
                 else:
-                    p.ai_condition = next(expConditions)
-                    p.participant.vars['ai_condition'] = p.ai_condition
-                print('set player.ai_condition to', p.ai_condition)
+                    player.ai_condition = 0
+                    player.participant.vars['ai_condition'] = player.ai_condition
+                print('set player.ai_condition to', player.ai_condition)
         else:
             player.surrogation = next(treats)
             # randomize AI prompt and save to player var
-            for p in subsession.get_players():
-                if p.session.config['ai_condition'] == 1:
-                    p.ai_condition = 1
-                    p.participant.vars['ai_condition'] = 1
-                elif p.session.config['ai_condition'] == 0:
-                    p.ai_condition = 0
-                    p.participant.vars['ai_condition'] = 0
-                else:
-                    p.ai_condition = next(expConditions)
-                    p.participant.vars['ai_condition'] = p.ai_condition
-                print('set player.ai_condition to', p.ai_condition)
+            for player in subsession.get_players():
+                if player.surrogation == 1:
+                    if player.session.config['ai_condition'] != "":
+                        player.ai_condition = player.session.config['ai_condition']
+                    else:
+                        player.ai_condition = next(expConditions)
+                        player.participant.vars['ai_condition'] = player.ai_condition
+                elif player.surrogation == 0:
+                    player.ai_condition = 0
+                    player.participant.vars['ai_condition'] = player.ai_condition
+                print('set player.ai_condition to', player.ai_condition)
         print('set player.surrogation to', player.surrogation)
 
         # set skill
