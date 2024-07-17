@@ -147,7 +147,7 @@ def creating_session(subsession: Subsession):
         print('set player.avatar to', player.avatar)
 
         # set prompt based on condition
-        p.msg = json.dumps([{"role": "system", "content": C.CHARACTER_PROMPT_A}])
+        player.msg = json.dumps([{"role": "system", "content": C.CHARACTER_PROMPT_A}])
 
 
 
