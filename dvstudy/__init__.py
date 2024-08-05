@@ -90,12 +90,14 @@ class Player(BasePlayer):
 def creating_session(subsession: Subsession):
     # randomize to treatments
     # Now always set to surrotation treatment
-    treats = itertools.cycle([1, 0])
-    skill_focus = itertools.cycle(['Accessory', 'Facial Hair', 'Eye Sight', 'Head Gear',])
+    treats = itertools.cycle([1, 2, 3])
+    # skill_focus = itertools.cycle(['Accessory', 'Facial Hair', 'Eye Sight', 'Head Gear',])
     expConditions = itertools.cycle([1, 0])
-    # skill_focus = itertools.cycle(['Accessory'])
+    skill_focus = itertools.cycle(['Facial Hair'])
     for player in subsession.get_players():
         player.seed = random.randint(0, 999999)
+
+        # if the config is measurement only
         if player.session.config['surrogation'] == 1:
             player.surrogation = player.session.config['surrogation']
             # randomize AI prompt and save to player var
@@ -104,7 +106,9 @@ def creating_session(subsession: Subsession):
             else:
                 player.ai_condition = next(expConditions)
                 player.participant.vars['ai_condition'] = player.ai_condition
-                print('set player.ai_condition to', player.ai_condition)
+            print('set player.ai_condition to', player.ai_condition)
+
+        # if the config is non-measurement only
         elif player.session.config['surrogation'] == 0:
             player.surrogation = player.session.config['surrogation']
             # randomize AI prompt and save to player var
@@ -114,20 +118,33 @@ def creating_session(subsession: Subsession):
                 player.ai_condition = 0
                 player.participant.vars['ai_condition'] = player.ai_condition
             print('set player.ai_condition to', player.ai_condition)
+
+        # randomize everything
         else:
-            player.surrogation = next(treats)
-            # randomize AI prompt and save to player var
-            if player.surrogation == 1:
-                if player.session.config['ai_condition'] != "":
-                    player.ai_condition = player.session.config['ai_condition']
-                else:
-                    player.ai_condition = next(expConditions)
-                    player.participant.vars['ai_condition'] = player.ai_condition
-            elif player.surrogation == 0:
+            #determine treatment
+            choose_treat = next(treats)
+            if choose_treat == 1:
+                player.surrogation = 0
                 player.ai_condition = 0
-                player.participant.vars['ai_condition'] = player.ai_condition
+            elif choose_treat == 2:
+                player.surrogation = 1
+                player.ai_condition = 0
+            else:
+                player.surrogation = 1
+                player.ai_condition = 1
+            # player.surrogation = next(treats)
+            # # randomize AI prompt and save to player var
+            # if player.surrogation == 1:
+            #     if player.session.config['ai_condition'] != "":
+            #         player.ai_condition = player.session.config['ai_condition']
+            #     else:
+            #         player.ai_condition = next(expConditions)
+            #         player.participant.vars['ai_condition'] = player.ai_condition
+            # elif player.surrogation == 0:
+            #     player.ai_condition = 0
+            #     player.participant.vars['ai_condition'] = player.ai_condition
             print('set player.ai_condition to', player.ai_condition)
-        print('set player.surrogation to', player.surrogation)
+            print('set player.surrogation to', player.surrogation)
 
         # set skill
         if player.surrogation == 1:
@@ -206,16 +223,34 @@ class Introduction2(Page):
 class Choice(Page):
     form_model = 'player'
     form_fields = [
+        'accessory',
+        'facial_hair',
+        'eye_sight',
+        'headgear',
         'chatLog',
         'main_name',
         'gen_check',
         'url',
-        'save_image',
-        'accessory',
-        'facial_hair',
-        'eye_sight',
-        'headgear'
+        'save_image'
     ]
+
+    @staticmethod
+    def get_form_fields(player: Player):
+        randomized_fields = [
+            'accessory',
+            'facial_hair',
+            'eye_sight',
+            'headgear'
+        ]
+        fixed_fields = [
+            'chatLog',
+            'main_name',
+            'gen_check',
+            'url',
+            'save_image'
+        ]
+        random.shuffle(randomized_fields)  # Randomize the order of these fields
+        return randomized_fields + fixed_fields  # Combine randomized and fixed fields
 
     @staticmethod
     def live_method(player: Player, data):

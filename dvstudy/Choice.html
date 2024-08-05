@@ -5,9 +5,10 @@
     Create Your Character
 {% endblock %}
 {% block content %}
-            {% if player.ai_condition == 1 %}
+<br>
+{% if player.ai_condition == 1 %}
     <hr>
-        Ask ChatGPT in the Chatbox below.
+        You can ask ChatGPT in the Chatbox below.
     <hr>
 <!--<div align="center">-->
 <!--        <button id="button_gpt" type="button" data-text-swap="Hide ChatGPT" data-bs-toggle="collapse" class="btn btn-outline-primary" data-bs-target="#collapsed_help">Show ChatGPT</button>-->
@@ -30,23 +31,25 @@
     <p></p>
     <!-- hidden input to save chat log -->
     <input type='hidden' name='chatLog' value='' id='id_chatLog'/>
-
 <!--    </div>-->
-
 {% endif %}
-
+<br>
     <hr>
-Please create your character below.
+        Please create your character below.
     <hr>
     <div class="wrapper" style="overflow: hidden;">
     <div class="column" style="float:left; text-align: left; width: 40%; margin-left: 1%;">
         {% formfield player.main_name label="Name" %}
         <hr>
-        {% formfield player.accessory label="Accessories" %}
-        {% formfield player.facial_hair label="Facial Hair" %}
-        {% formfield player.eye_sight label="Eye Sight" %}
-        {% formfield player.headgear label="Head Gear" %}
-        <p>
+<!--        {% formfield player.accessory label="Accessories" %}-->
+<!--        {% formfield player.facial_hair label="Facial Hair" %}-->
+<!--        {% formfield player.eye_sight label="Eye Sight" %}-->
+<!--        {% formfield player.headgear label="Head Gear" %}-->
+        {% for field in form %}
+            {% if field.name in ['accessory', 'facial_hair', 'eye_sight', 'headgear'] %}
+                {% formfield field.name %}
+            {% endif %}
+        {% endfor %}
         <p></p>
     </div>
     <div class="column" style="float:right; width: 30%; margin-right: 15%;  position: relative;">
