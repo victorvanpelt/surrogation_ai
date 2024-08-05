@@ -59,7 +59,7 @@ class Player(BasePlayer):
     save_image = models.BooleanField(blank=True, widget=widgets.CheckboxInput)
     surrogation = models.IntegerField()
     measure_skill = models.StringField()
-    avatar = models.StringField()
+    # avatar = models.StringField()
     seed = models.IntegerField()
 
     #names
@@ -93,37 +93,34 @@ def creating_session(subsession: Subsession):
         if player.session.config['surrogation'] == 1:
             player.surrogation = player.session.config['surrogation']
             # randomize AI prompt and save to player var
-            for player in subsession.get_players():
+            if player.session.config['ai_condition'] != "":
+                player.ai_condition = player.session.config['ai_condition']
+            else:
+                player.ai_condition = next(expConditions)
+                player.participant.vars['ai_condition'] = player.ai_condition
+                print('set player.ai_condition to', player.ai_condition)
+        elif player.session.config['surrogation'] == 0:
+            player.surrogation = player.session.config['surrogation']
+            # randomize AI prompt and save to player var
+            if player.session.config['ai_condition'] != "":
+                player.ai_condition = player.session.config['ai_condition']
+            else:
+                player.ai_condition = 0
+                player.participant.vars['ai_condition'] = player.ai_condition
+            print('set player.ai_condition to', player.ai_condition)
+        else:
+            player.surrogation = next(treats)
+            # randomize AI prompt and save to player var
+            if player.surrogation == 1:
                 if player.session.config['ai_condition'] != "":
                     player.ai_condition = player.session.config['ai_condition']
                 else:
                     player.ai_condition = next(expConditions)
                     player.participant.vars['ai_condition'] = player.ai_condition
-                print('set player.ai_condition to', player.ai_condition)
-        elif player.session.config['surrogation'] == 0:
-            player.surrogation = player.session.config['surrogation']
-            # randomize AI prompt and save to player var
-            for player in subsession.get_players():
-                if player.session.config['ai_condition'] != "":
-                    player.ai_condition = player.session.config['ai_condition']
-                else:
-                    player.ai_condition = 0
-                    player.participant.vars['ai_condition'] = player.ai_condition
-                print('set player.ai_condition to', player.ai_condition)
-        else:
-            player.surrogation = next(treats)
-            # randomize AI prompt and save to player var
-            for player in subsession.get_players():
-                if player.surrogation == 1:
-                    if player.session.config['ai_condition'] != "":
-                        player.ai_condition = player.session.config['ai_condition']
-                    else:
-                        player.ai_condition = next(expConditions)
-                        player.participant.vars['ai_condition'] = player.ai_condition
-                elif player.surrogation == 0:
-                    player.ai_condition = 0
-                    player.participant.vars['ai_condition'] = player.ai_condition
-                print('set player.ai_condition to', player.ai_condition)
+            elif player.surrogation == 0:
+                player.ai_condition = 0
+                player.participant.vars['ai_condition'] = player.ai_condition
+            print('set player.ai_condition to', player.ai_condition)
         print('set player.surrogation to', player.surrogation)
 
         # set skill
@@ -135,8 +132,8 @@ def creating_session(subsession: Subsession):
     # Now always set to avatar treatment
     for player in subsession.get_players():
         # player.avatar = random.choice(['yes', 'no'])
-        player.avatar = 'yes'
-        print('set player.avatar to', player.avatar)
+        # player.avatar = 'yes'
+        # print('set player.avatar to', player.avatar)
 
         # set prompt based on condition
         player.msg = json.dumps([{"role": "system", "content": C.CHARACTER_PROMPT_A}])

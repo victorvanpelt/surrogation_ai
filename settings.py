@@ -19,7 +19,7 @@ SESSION_CONFIGS = [
         app_sequence=['dvstudy', ],
         num_demo_participants=8,
         surrogation="",
-        prompt="A",
+        prompt="",
         ai_condition=""
     )
 ]
