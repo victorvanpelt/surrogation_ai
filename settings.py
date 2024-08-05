@@ -17,7 +17,7 @@ SESSION_CONFIGS = [
     dict(
         name='dvstudy',
         app_sequence=['dvstudy', ],
-        num_demo_participants=8,
+        num_demo_participants=16,
         surrogation="",
         prompt="",
         ai_condition=""

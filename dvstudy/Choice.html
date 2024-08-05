@@ -6,15 +6,16 @@
 {% endblock %}
 {% block content %}
             {% if player.ai_condition == 1 %}
-<div align="center">
-        <button id="button_gpt" type="button" data-text-swap="Hide ChatGPT" data-bs-toggle="collapse" class="btn btn-outline-primary" data-bs-target="#collapsed_help">Show ChatGPT</button>
-    </div>
-        <div id="collapsed_help" class="collapse">
-    <br>
-
-
+    <hr>
+        Ask ChatGPT in the Chatbox below.
+    <hr>
+<!--<div align="center">-->
+<!--        <button id="button_gpt" type="button" data-text-swap="Hide ChatGPT" data-bs-toggle="collapse" class="btn btn-outline-primary" data-bs-target="#collapsed_help">Show ChatGPT</button>-->
+<!--    </div>-->
+<!--        <div id="collapsed_help" class="collapse">-->
+<!--    <br>-->
     <!-- div displaying chat messages -->
-    <div class="textBox" style="background: white;border: 1px solid lightgrey;border-radius: 0.5rem;padding: 1rem;height: 50vh;position:relative;overflow:auto;">
+    <div class="textBox" style="background: white;border: 1px solid lightgrey;border-radius: 0.5rem;padding: 1rem;height: 35vh;position:relative;overflow:auto;">
         <div id="chat_messages">
         </div>
     </div>
@@ -30,9 +31,11 @@
     <!-- hidden input to save chat log -->
     <input type='hidden' name='chatLog' value='' id='id_chatLog'/>
 
-    </div>
+<!--    </div>-->
 
 {% endif %}
+
+    <hr>
 Please create your character below.
     <hr>
     <div class="wrapper" style="overflow: hidden;">
@@ -68,7 +71,7 @@ Please create your character below.
     <hr>
     {% formfield player.save_image label="I want to download and keep the avatar I created." %}
     <p></p>
-    <input type="hidden" id="seed" name="seed" value="0">
+    <input type="hidden" name="url" value="">
     <input type="hidden" id="gen_check" name="gen_check" value="0">
     <button type="button_next" class="btn btn-primary" id="button_next">
         Next
@@ -103,7 +106,7 @@ Please create your character below.
             if (total == 100) {
                 $('#avatar').replaceWith('<img width="250" height="250" style="-ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar"  src="https://api.dicebear.com/8.x/pixel-art/svg?' + 'seed=' + seed + '&accessoriesProbability=' + accessory + '&beardProbability=' + facial_hair + '&glassesProbability=' + ((-1 * eye_sight) + 100) + '&hatProbability=' + headgear + '" type="image/svg+xml">');
                 document.getElementById('gen_check').value = 1;
-                document.getElementById('seed').value = seed;
+                // document.getElementById('seed').value = seed;
 
             } else {
                 window.alert("Please ensure the total allocated points adds up to 100.");
@@ -122,7 +125,7 @@ Please create your character below.
             facial_hair = facial_hair || "0";
             eye_sight = eye_sight || "0";
             headgear = headgear || "0";
-            var seed = $('input[name=seed]').val();
+            var seed = {{ player.seed }};
             var total = parseInt(accessory) + parseInt(facial_hair) + parseInt(eye_sight) + parseInt(headgear);
 
             if (total == 100) {
@@ -137,28 +140,32 @@ Please create your character below.
     </script>
 
     <script>
-        $('#button_next').on('click', function(event) {
+        $('#button_next').on('click', function (event) {
             event.preventDefault ? event.preventDefault() : event.returnValue = false;
 
             if ($('#gen_check').val() == 1) {
                 if ($('#id_save_image').is(':checked')) {
-                const svgElement = document.getElementById('avatar');
-                const serializer = new XMLSerializer();
-                const svgBlob = new Blob([serializer.serializeToString(svgElement)], {type: 'image/svg+xml'});
-                const blobUrl = URL.createObjectURL(svgBlob);
+                    const svgElement = document.getElementById('avatar');
+                    const serializer = new XMLSerializer();
+                    const svgBlob = new Blob([serializer.serializeToString(svgElement)], {type: 'image/svg+xml'});
+                    const blobUrl = URL.createObjectURL(svgBlob);
 
-                const downloadLink = document.createElement('a');
-                downloadLink.href = blobUrl;
-                downloadLink.download = document.getElementById('id_main_name').value + '.svg'; // Set the download filename
-                document.body.appendChild(downloadLink);
-                downloadLink.click();
-                document.body.removeChild(downloadLink);
+                    const downloadLink = document.createElement('a');
+                    downloadLink.href = blobUrl;
+                    downloadLink.download = document.getElementById('id_main_name').value + '.svg'; // Set the download filename
+                    document.body.appendChild(downloadLink);
+                    downloadLink.click();
+                    document.body.removeChild(downloadLink);
                 }
 
+                // Get the src attribute of the img element with id="avatar"
+                const imgSrc = $('#avatar').attr('src');
+                console.log(imgSrc);
+                // Set the value of the input field named "url" to imgSrc
+                $('input[name=url]').val(imgSrc);
                 document.forms[0].submit();
                 $('#form').submit();
-            }
-            else {
+            } else {
                 alert("Please generate a character to continue.");
             }
         });
@@ -166,17 +173,17 @@ Please create your character below.
 
 
 <!--all kinds of code-->
-    <script>
-        var button = document.getElementById("button_gpt");
-        button.addEventListener('click', function() {
-            if (button.getAttribute("data-text-swap") == button.innerHTML) {
-                button.innerHTML = button.getAttribute("data-text-original");
-            } else {
-                button.setAttribute("data-text-original", button.innerHTML);
-                button.innerHTML = button.getAttribute("data-text-swap");
-            }
-        }, false);
-    </script>
+<!--    <script>-->
+<!--        var button = document.getElementById("button_gpt");-->
+<!--        button.addEventListener('click', function() {-->
+<!--            if (button.getAttribute("data-text-swap") == button.innerHTML) {-->
+<!--                button.innerHTML = button.getAttribute("data-text-original");-->
+<!--            } else {-->
+<!--                button.setAttribute("data-text-original", button.innerHTML);-->
+<!--                button.innerHTML = button.getAttribute("data-text-swap");-->
+<!--            }-->
+<!--        }, false);-->
+<!--    </script>-->
 
 
     <script>

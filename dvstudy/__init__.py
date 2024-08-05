@@ -1,8 +1,12 @@
 import itertools
+import random
+
 from otree.api import *
 from os import environ
 from openai import OpenAI
 import json
+import os
+import requests
 
 client = OpenAI(
   api_key=environ.get('OPENAI_API_KEY'),
@@ -60,7 +64,8 @@ class Player(BasePlayer):
     surrogation = models.IntegerField()
     measure_skill = models.StringField()
     # avatar = models.StringField()
-    seed = models.IntegerField()
+    seed = models.IntegerField(initial=0)
+    url = models.StringField()
 
     #names
     main_name = models.StringField(blank=False)
@@ -90,6 +95,7 @@ def creating_session(subsession: Subsession):
     expConditions = itertools.cycle([1, 0])
     # skill_focus = itertools.cycle(['Accessory'])
     for player in subsession.get_players():
+        player.seed = random.randint(0, 999999)
         if player.session.config['surrogation'] == 1:
             player.surrogation = player.session.config['surrogation']
             # randomize AI prompt and save to player var
@@ -177,6 +183,8 @@ def runGPT(inputMessage):
         print(f"An error occurred: {e}")
         return None
 
+
+
 # PAGES
 class Introduction1(Page):
     form_model = 'player'
@@ -201,7 +209,7 @@ class Choice(Page):
         'chatLog',
         'main_name',
         'gen_check',
-        'seed',
+        'url',
         'save_image',
         'accessory',
         'facial_hair',
