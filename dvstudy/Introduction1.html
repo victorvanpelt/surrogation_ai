@@ -2,27 +2,23 @@
 {% load staticfiles otree %}
 
 {% block title %}
-    Instructions (1 of 2)
+    Instructions (1 of 3)
 {% endblock %}
 
 {% block content %}
-<p style="text-align: center;">
-<img style="width:275px; height:275px;" id="avatar" src="{% static "surrogation/logo.webp" %}"/>
-</p>
-
 <div class="card card-body bg-light instructions">
         <ul>
-            <li>Your task is to create a playable character for a mobile Pixel Art Game called "City Life".</li>
-            <li>It is a puzzle and adventure game where players explore a vast city containing variety of non-playable characters (NPCs).</li>
-            <li>The playable character you will design will be the main playable character of the mobile game.</li>
-            <li>The primary goal is the make the character as appealing as possible to a large audience.</li>
+            <li>For completing this task, you will earn a base fee of 1.00 CHF.</li>
+            <li>On top of this amount, you can win one of two Amazon Vouchers worth 50 CHF.</li>
+            <li>Winning this voucher depends on how well you perform on the task compared to others.</li>
+            <li>You will receive your compensation and, if applicable, the voucher as soon as possible after you complete the study.</li>
         </ul>
 </div>
     <p>
         <b>Please evaluate the following statement.</b>
     </p>
     <p>
-        {% formfield player.Instr1 label="My task is to create a playable character that is as appealing as possible to a large audience." %}
+        {% formfield player.Instr1 label="I can win an Amazon Voucher worth 50 CHF depending on how well I perform on the task compared to others." %}
     </p>
 <br>
     {% next_button %}

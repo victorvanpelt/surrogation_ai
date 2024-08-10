@@ -1,0 +1,41 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+
+{% block title %}
+    Instructions (3 of 3)
+{% endblock %}
+
+{% block content %}
+<p style="text-align: center;">
+<img style="width:275px; height:275px;" id="avatar" src="{% static "dvstudy/examples_art.jpg" %}"/>
+</p>
+
+<div class="card card-body bg-light instructions">
+        <ul>
+            <li>You will be able to distribute 100 points to four different attributes of the character:</li>
+            <ul>
+                <li>Accessories: Increases the chance your character will wear earings.</li>
+                <li>Facial Hair: Increases the chance your character will have a beard.</li>
+                <li>Eye Sight: Decreases the chance your character needs glasses.</li>
+                <li>Head Gear: Increases the chance your character wears a hat.</li>
+            </ul>
+            <li>Distributing points to an attribute increases the importance of that particular attribute for your character.</li>
+            {% if player.surrogation == 1 %}
+                <li>We are measuring how many points each participant allocates to the <b>{{ player.measure_skill }}</b> Score of their character.</li>
+                <!--<li>Consumer research has shown that each of the four attributes have an equal impact on the character's appeal.</li>-->
+            {% endif %}
+<!--            {% if player.ai_condition == 1 %}-->
+<!--            <li>When designing the playable character, you will have access to ChatGPT.</li>-->
+<!--            {% endif %}-->
+        </ul>
+</div>
+    <p>
+        <b>Please evaluate the following statement.</b>
+    </p>
+    <p>
+        {% formfield player.Instr3 label="Distributing the 100 points to the different attributes determines their importance for my character." %}
+    </p>
+<br>
+    {% next_button %}
+
+{% endblock %}

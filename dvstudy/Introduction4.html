@@ -1,0 +1,26 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+
+{% block title %}
+    One more thing!
+{% endblock %}
+
+{% block content %}
+<div class="card card-body bg-light instructions">
+        <ul>
+            <li>When designing the playable character, you will have access to ChatGPT.</li>
+            <li>Please see a screenshot of Chatgpt's chat window below.</li>
+            <li>You can use chatgpt to help you design your character.</li>
+        </ul>
+</div>
+<p style="text-align: center;">
+<img style="width:925px;" id="avatar" src="{% static "dvstudy/chatgpt.jpg" %}"/>
+</p>
+<hr>
+    <p style="text-align: center;">
+        <b>Please click next to continue.</b>
+    </p>
+<div style="text-align: center;">
+        {% next_button %}
+</div>
+{% endblock %}

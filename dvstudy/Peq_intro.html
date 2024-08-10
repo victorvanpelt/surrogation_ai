@@ -1,0 +1,22 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+
+{% block title %}
+    A few more questions...
+{% endblock %}
+
+{% block content %}
+    <style>
+    .otree-timer {
+        display: none;
+    }
+    </style>
+<div class="card card-body bg-light instructions" align="center">
+    This study is almost over.<br>
+    To complete the study, please complete this short questionnaire.
+</div>
+<br>
+<div align="center">
+    {% next_button %}
+</div>
+{% endblock %}

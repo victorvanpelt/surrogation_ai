@@ -1,0 +1,34 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+
+{% block title %}
+    A few more questions (Page 2 of 3)
+{% endblock %}
+
+{% block content %}
+    <style>
+    .otree-timer {
+        display: none;
+    }
+    </style>
+    <div class="card card-body bg-light instructions" style="text-align:center">
+        Here are a number of characteristics that may or may not apply to you. Please indicate the extent to which you agree or disagree with each statement.
+    </div>
+     <table class="table">
+    {% for field in form %}
+        <tr>
+            <td>
+                {{ field.label }}
+            </td>
+            <td align="right">
+                {{ field }}
+            </td>
+        </tr>
+    {% endfor %}
+    </table>
+    <hr>
+    {% next_button %}
+
+{% endblock %}
+{% block scripts %}
+{% endblock %}

@@ -24,7 +24,6 @@ class C(BaseConstants):
     NUM_ROUNDS = 1
 
     # chatGPT vars
-
     ## temperature (range 0 - 2)
     ## this sets the bot's creativity in responses, with higher values being more creative
     ## https://platform.openai.com/docs/api-reference/completions#completions/create-temperature
@@ -39,6 +38,28 @@ class C(BaseConstants):
     CHARACTER_PROMPT_A = """        
     """
 
+    #PEQ
+    STANDARDCHOICESFIVE = [
+        [1, 'Strongly agree'],
+        [2, 'Agree'],
+        [3, 'Neither agree nor disagree'],
+        [4, 'Disagree'],
+        [5, 'Strongly disagree'],
+    ]
+    STANDARDCHOICESTWO = [[0, "True"], [1, "False"]]
+    STANDARDCHOICESTEN = [
+        [0, '0 (Not at all)'],
+        [1, '1'],
+        [2, '2'],
+        [3, '3'],
+        [4, '4'],
+        [5, '5'],
+        [6, '6'],
+        [7, '7'],
+        [8, '8'],
+        [9, '9'],
+        [10, '10 (Very much)'],
+    ]
 
 class Subsession(BaseSubsession):
     pass
@@ -57,6 +78,9 @@ class Player(BasePlayer):
     Instr2 = models.IntegerField(
         choices=[[1, 'True'], [2, 'False']], widget=widgets.RadioSelect, blank=False
     )
+    Instr3 = models.IntegerField(
+        choices=[[1, 'True'], [2, 'False']], widget=widgets.RadioSelect, blank=False
+    )
 
 
     gen_check = models.IntegerField(blank=True, initial=0)
@@ -68,7 +92,7 @@ class Player(BasePlayer):
     url = models.StringField()
 
     #names
-    main_name = models.StringField(blank=False)
+    main_name = models.StringField(blank=True)
 
     #features
     accessory = models.IntegerField(blank=True)
@@ -85,6 +109,128 @@ class Player(BasePlayer):
     chatLog = models.LongStringField(blank=True)
     # input data for gpt
     msg = models.LongStringField(blank=True)
+
+    #PEQ - DEMOGRAPHICS
+    # Demographics
+    gender = models.IntegerField(
+        label="Please select the gender you identify most with.",
+        blank=False,
+        choices=[
+            [1, 'Male'],
+            [2, 'Female'],
+            [3, 'Other']
+        ],
+    )
+    age = models.IntegerField(label="Please enter your age.", min=18, max=100, blank=False)
+    education = models.IntegerField(
+        label="What is the highest level of education that you have completed?",
+        blank=False,
+        choices=[
+            [1, 'Less than High school'],
+            [2, 'High school'],
+            [3, 'College/University without undergraduate degree'],
+            [4, 'Undergraduate (Bachelor, BSc, BA, etc.)'],
+            [5, 'Graduate degree (Master, MS, MA, MSc, etc.)'],
+            [6, 'Postgraduate (PhD, MBA, MD, etc.)'],
+        ],
+    )
+    english = models.IntegerField(label="Please rate your English proficiency.", blank=False,
+                                  choices=[
+        [0, '0 (Very Poor)'],
+        [1, '1'],
+        [2, '2'],
+        [3, '3'],
+        [4, '4'],
+        [5, '5'],
+        [6, '6'],
+        [7, '7'],
+        [8, '8'],
+        [9, '9'],
+        [10, '10 (Excellent)']
+    ])
+    email = models.StringField(label="Please leave your emailaddress to receive the show-up fee and a chance to win one of the Amazon vouchers", blank=True)
+
+    #PEQ - One
+    ai_check = models.IntegerField(
+        label="On the screen where I designed the character, I had access to a chatbox at the top of the screen.",
+        blank=False,
+        choices=[
+            [0, 'False'],
+            [1, 'True'],
+        ],
+    )
+    measure_check = models.IntegerField(
+        label="This study measures the number of points participants allocate to 'Facial Hair.'",
+        blank=False,
+        choices=[
+            [0, 'False'],
+            [1, 'True'],
+        ],
+    )
+    difficulty = models.IntegerField(
+        label="How difficult was this study?",
+        choices=[
+            [1, 'Extremely easy'],
+            [2, 'Moderately easy'],
+            [3, 'Slightly easy'],
+            [4, 'Neither easy nor difficult'],
+            [5, 'Slightly difficult'],
+            [6, 'Moderately difficult'],
+            [7, 'Extremely difficult'],
+        ],
+        blank=False,
+    )
+    clarity = models.IntegerField(
+        label="How clear were the instructions?",
+        choices=[
+            [1, 'Extremely clear'],
+            [2, 'Moderately clear'],
+            [3, 'Slightly clear'],
+            [4, 'Neither clear nor unclear'],
+            [5, 'Slightly unclear'],
+            [6, 'Moderately unclear'],
+            [7, 'Extremely unclear'],
+        ],
+        blank=False,
+    )
+    most_imp_attribute = models.IntegerField(
+        label="Which attribute do you believe contributed most to creating an appealing character?",
+        choices=[
+            [1, 'Accessories'],
+            [2, 'Facial Hair'],
+            [3, 'Eye Sight'],
+            [4, 'Head Gear'],
+            [5, 'Each attribute contributed equally'],
+        ],
+        blank=False,
+    )
+
+    #PEQ - two
+    creative_1 = models.IntegerField(
+        label="I think I am a creative person.",
+        blank=False,
+        choices=C.STANDARDCHOICESFIVE
+    )
+    creative_2 = models.IntegerField(
+        label="My creativity is important for who I am.",
+        blank=False,
+        choices=C.STANDARDCHOICESFIVE
+    )
+    creative_3 = models.IntegerField(
+        label="Being a creative person is important to me.",
+        blank=False,
+        choices=C.STANDARDCHOICESFIVE
+    )
+    creative_4 = models.IntegerField(
+        label="Creativity is an important part of myself.",
+        blank=False,
+        choices=C.STANDARDCHOICESFIVE
+    )
+    creative_5 = models.IntegerField(
+        label="Ingenuity is a characteristic that is important to me.",
+        blank=False,
+        choices=C.STANDARDCHOICESFIVE
+    )
 
 # FUNCTIONS
 def creating_session(subsession: Subsession):
@@ -203,13 +349,23 @@ def runGPT(inputMessage):
 
 
 # PAGES
+class Welcome(Page):
+    form_model = 'player'
+    form_fields = ['accept_instructions']
+
+    def error_message(player: Player, value):
+        if value["accept_instructions"] != True:
+            return 'You must accept the conditions to continue.'
+
+
 class Introduction1(Page):
     form_model = 'player'
     form_fields = ['Instr1']
 
     def error_message(player: Player, value):
         if value["Instr1"] != 1:
-            return 'Your answer is incorrect. Your task is to create a playable character that is as appealing as possible.'
+            return 'Your answer is incorrect. You can win an Amazon Voucher of 50 CHF depending on how well you perform on the task compared to others.'
+
 
 
 class Introduction2(Page):
@@ -218,7 +374,21 @@ class Introduction2(Page):
 
     def error_message(player: Player, value):
         if value["Instr2"] != 1:
-            return 'Your answer is incorrect. You can distribute 100 points to four different attributes.'
+            return 'Your answer is incorrect. Your task is to create a playable character that is as appealing as possible.'
+
+
+class Introduction3(Page):
+    form_model = 'player'
+    form_fields = ['Instr3']
+
+    def error_message(player: Player, value):
+        if value["Instr3"] != 1:
+            return 'Your answer is incorrect. Distributing the 100 points to the different attributes determines their importance for your character.'
+
+class Introduction4(Page):
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.ai_condition == 1
 
 class Choice(Page):
     form_model = 'player'
@@ -291,8 +461,64 @@ class Choice(Page):
         return {
         }
 
-class Results(Page):
+class Peq_intro(Page):
+    pass
+
+class Peq_one(Page):
+    form_model = 'player'
+    form_fields = [
+        'ai_check',
+        'measure_check',
+        'difficulty',
+        'clarity',
+        'most_imp_attribute'
+    ]
+
+    @staticmethod
+    def get_form_fields(player: Player):
+        fields = [
+            'ai_check',
+            'measure_check',
+            'difficulty',
+            'clarity',
+            'most_imp_attribute'
+        ]
+        random.shuffle(fields)
+        return fields
+
+class Peq_two(Page):
+    form_model = 'player'
+    form_fields = [
+        'creative_1',
+        'creative_2',
+        'creative_3',
+        'creative_4',
+        'creative_5'
+    ]
+
+    @staticmethod
+    def get_form_fields(player: Player):
+        fields = [
+            'creative_1',
+            'creative_2',
+            'creative_3',
+            'creative_4',
+            'creative_5'
+        ]
+        random.shuffle(fields)
+        return fields
+
+class Peq_demo(Page):
+    form_model = 'player'
+    form_fields = [
+        'gender',
+        'age',
+        'english',
+        'email'
+    ]
+
+class Final(Page):
     pass
 
 
-page_sequence = [Introduction1, Introduction2, Choice, Results]
+page_sequence = [Welcome, Introduction1, Introduction2, Introduction3, Introduction4, Choice, Peq_intro, Peq_one, Peq_demo, Final]

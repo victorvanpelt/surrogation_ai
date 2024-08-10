@@ -107,7 +107,7 @@
             var total = parseInt(accessory) + parseInt(facial_hair) + parseInt(eye_sight) + parseInt(headgear);
 
             if (total == 100) {
-                $('#avatar').replaceWith('<img width="250" height="250" style="-ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar"  src="https://api.dicebear.com/8.x/pixel-art/svg?' + 'seed=' + seed + '&accessoriesProbability=' + accessory + '&beardProbability=' + facial_hair + '&glassesProbability=' + ((-1 * eye_sight) + 100) + '&hatProbability=' + headgear + '" type="image/svg+xml">');
+                $('#avatar').replaceWith('<img width="250" height="250" style="-ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar"  src="https://dicebear-7227ab440045.herokuapp.com/9.x/pixel-art/svg?' + 'seed=' + seed + '&accessoriesProbability=' + accessory + '&beardProbability=' + facial_hair + '&glassesProbability=' + ((-1 * eye_sight) + 100) + '&hatProbability=' + headgear + '" type="image/svg+xml">');
                 document.getElementById('gen_check').value = 1;
                 // document.getElementById('seed').value = seed;
 
@@ -132,7 +132,7 @@
             var total = parseInt(accessory) + parseInt(facial_hair) + parseInt(eye_sight) + parseInt(headgear);
 
             if (total == 100) {
-                $('#avatar').replaceWith('<img width="250" height="250" style="-ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar"  src="https://api.dicebear.com/8.x/pixel-art/svg?' + 'seed=' + seed + '&accessoriesProbability=' + accessory + '&beardProbability=' + facial_hair + '&glassesProbability=' + ((-1 * eye_sight) + 100) + '&hatProbability=' + headgear + '" type="image/svg+xml">');
+                $('#avatar').replaceWith('<img width="250" height="250" style="-ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar"  src="https://dicebear-7227ab440045.herokuapp.com/9.x/pixel-art/svg?' + 'seed=' + seed + '&accessoriesProbability=' + accessory + '&beardProbability=' + facial_hair + '&glassesProbability=' + ((-1 * eye_sight) + 100) + '&hatProbability=' + headgear + '" type="image/svg+xml">');
                 document.getElementById('gen_check').value = 1;
 
             } else {
@@ -146,7 +146,7 @@
         $('#button_next').on('click', function (event) {
             event.preventDefault ? event.preventDefault() : event.returnValue = false;
 
-            if ($('#gen_check').val() == 1) {
+            if ($('#gen_check').val() == 1 && $('#id_main_name').val() != '') {
                 if ($('#id_save_image').is(':checked')) {
                     const svgElement = document.getElementById('avatar');
                     const serializer = new XMLSerializer();
@@ -168,8 +168,10 @@
                 $('input[name=url]').val(imgSrc);
                 document.forms[0].submit();
                 $('#form').submit();
-            } else {
+            } else if ($('#gen_check').val() != 1 && $('#id_main_name').val() != '') {
                 alert("Please generate a character to continue.");
+            } else {
+                alert("Please give your character a name to continue.");
             }
         });
     </script>

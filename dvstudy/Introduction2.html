@@ -2,38 +2,27 @@
 {% load staticfiles otree %}
 
 {% block title %}
-    Instructions (2 of 2)
+    Instructions (2 of 3)
 {% endblock %}
 
 {% block content %}
 <p style="text-align: center;">
-<img style="width:275px; height:275px;" id="avatar" src="{% static "surrogation/examples_art.jpg" %}"/>
+<img style="width:275px; height:275px;" id="avatar" src="{% static "dvstudy/logo.webp" %}"/>
 </p>
 
 <div class="card card-body bg-light instructions">
         <ul>
-            <li>You will be able to distribute 100 points to four different attributes of the character:</li>
-            <ul>
-                <li>Accessories: Increases the chance your character will wear earings.</li>
-                <li>Facial Hair: Increases the chance your character will have a beard.</li>
-                <li>Eye Sight: Decreases the chance your character needs glasses.</li>
-                <li>Head Gear: Increases the chance your character wears a hat.</li>
-            </ul>
-            <li>Distributing points to an attribute increases the importance of that particular attribute for your characters.</li>
-<!--            <li>Consumer research has shown that each of the four attributes have an equal impact on the character's appeal.</li>-->
-            {% if player.surrogation == 1 %}
-                <li>We are measuring how many points participants allocate to the {{ player.measure_skill }} Score of their character.</li>
-            {% endif %}
-            {% if player.ai_condition == 1 %}
-            <li>When designing the playable character, you will have access to ChatGPT.</li>
-            {% endif %}
+            <li>Your task is to create a playable character for a mobile Pixel Art Game called "City Life".</li>
+            <li>It is a puzzle and adventure game where players explore a vast city containing variety of non-playable characters (NPCs).</li>
+            <li>The playable character you will design will be the main playable character of the mobile game.</li>
+            <li>The primary goal is the make the character as appealing as possible to a large audience.</li>
         </ul>
 </div>
     <p>
         <b>Please evaluate the following statement.</b>
     </p>
     <p>
-        {% formfield player.Instr2 label="I can distribute 100 points to four different attributes." %}
+        {% formfield player.Instr2 label="My task is to create a playable character that is as appealing as possible to a large audience." %}
     </p>
 <br>
     {% next_button %}

@@ -1,0 +1,24 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+
+{% block title %}
+    Welcome!
+{% endblock %}
+
+{% block content %}
+<div class="card card-body bg-light instructions">
+        <ul>
+            <li>In this study, we will ask you to conduct a task, which will take about 10 minute to complete</li>
+            <li>There is no psychological discomfort, no physical discomfort, nor any deception in this study.</li>
+            <li>Your decisions and answers will only be stored in anonymous form. We will not store for personally identifying information.</li>
+            <li>Your anonymized data will be used for academic purposes and may be shared with other academics for research purposes.</li>
+            <li>Participation is completely voluntary, and you can quit at any time.</li>
+        </ul>
+</div>
+    <p>
+        {% formfield player.accept_instructions label="I accept the conditions and would like to continue." %}
+    </p>
+<br>
+    {% next_button %}
+
+{% endblock %}
