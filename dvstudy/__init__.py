@@ -148,11 +148,11 @@ class Player(BasePlayer):
         [9, '9'],
         [10, '10 (Excellent)']
     ])
-    email = models.StringField(label="Please leave your emailaddress to receive the show-up fee and a chance to win one of the Amazon vouchers", blank=True)
+    email = models.StringField(label="Please leave your emailaddress to receive the show-up fee and a chance to win one of the online shopping gift vouchers", blank=True)
 
     #PEQ - One
     ai_check = models.IntegerField(
-        label="On the screen where I designed the character, I had access to a chatbox at the top of the screen.",
+        label="On the screen where I designed the character, I had access to a chatbox with ChatGPT at the top of the screen.",
         blank=False,
         choices=[
             [0, 'False'],
@@ -160,7 +160,7 @@ class Player(BasePlayer):
         ],
     )
     measure_check = models.IntegerField(
-        label="This study measures the number of points participants allocate to 'Facial Hair.'",
+        label="This study measures whether each participant allocates points to 'Facial Hair.'",
         blank=False,
         choices=[
             [0, 'False'],
@@ -194,7 +194,7 @@ class Player(BasePlayer):
         blank=False,
     )
     most_imp_attribute = models.IntegerField(
-        label="Which attribute do you believe contributed most to creating an appealing character?",
+        label="Which attribute do you believe contributed most to creating an appealing and relatable character?",
         choices=[
             [1, 'Accessories'],
             [2, 'Facial Hair'],
@@ -203,6 +203,16 @@ class Player(BasePlayer):
             [5, 'Each attribute contributed equally'],
         ],
         blank=False,
+    )
+    ai_usage = models.IntegerField(
+        label="I use generative A.I., such as ChatGPT, regularly for work and studies.",
+        blank=False,
+        choices=C.STANDARDCHOICESFIVE
+    )
+    ai_helpful = models.IntegerField(
+        label="Generative A.I., such as ChatGPT, is helpful for my work and studies.",
+        blank=False,
+        choices=C.STANDARDCHOICESFIVE
     )
 
     #PEQ - two
@@ -364,7 +374,7 @@ class Introduction1(Page):
 
     def error_message(player: Player, value):
         if value["Instr1"] != 1:
-            return 'Your answer is incorrect. You can win an Amazon Voucher of 50 CHF depending on how well you perform on the task compared to others.'
+            return 'Your answer is incorrect. You can win an online shopping gift voucher of 50 CHF depending on how well you perform on the task compared to others.'
 
 
 
@@ -374,7 +384,7 @@ class Introduction2(Page):
 
     def error_message(player: Player, value):
         if value["Instr2"] != 1:
-            return 'Your answer is incorrect. Your task is to create a playable character that is as appealing as possible.'
+            return 'Your answer is incorrect. Your task is to create a playable character that is as appealing and relatable as possible.'
 
 
 class Introduction3(Page):
@@ -471,7 +481,9 @@ class Peq_one(Page):
         'measure_check',
         'difficulty',
         'clarity',
-        'most_imp_attribute'
+        'most_imp_attribute',
+        'ai_helpful',
+        'ai_usage'
     ]
 
     @staticmethod
@@ -481,7 +493,9 @@ class Peq_one(Page):
             'measure_check',
             'difficulty',
             'clarity',
-            'most_imp_attribute'
+            'most_imp_attribute',
+            'ai_helpful',
+            'ai_usage'
         ]
         random.shuffle(fields)
         return fields
