@@ -148,7 +148,7 @@ class Player(BasePlayer):
         [9, '9'],
         [10, '10 (Excellent)']
     ])
-    email = models.StringField(label="Please leave your emailaddress to receive the show-up fee and a chance to win one of the online shopping gift vouchers", blank=True)
+    email = models.StringField(label="Please leave your email-address to receive the show-up fee and a chance to win one of the online shopping gift vouchers", blank=True)
 
     #PEQ - One
     ai_check = models.IntegerField(
