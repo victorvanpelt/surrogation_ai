@@ -14,7 +14,7 @@ Please create your character below.
         <hr>
         {% formfield player.accessory label="Accessories" %}
         {% formfield player.facial_hair label="Facial Hair" %}
-        {% formfield player.eye_sight label="Eye Sight" %}
+        {% formfield player.eye_sight label="Glasses" %}
         {% formfield player.headgear label="Head Gear" %}
         <p>
         <p></p>
@@ -72,7 +72,7 @@ Please create your character below.
             var total = parseInt(accessory) + parseInt(facial_hair) + parseInt(eye_sight) + parseInt(headgear);
 
             if (total == 100) {
-                $('#avatar').replaceWith('<img width="250" height="250" style="-ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar"  src="https://dicebear-7227ab440045.herokuapp.com/9.x/pixel-art/svg?' + 'seed=' + seed + '&accessoriesProbability=' + accessory + '&beardProbability=' + facial_hair + '&glassesProbability=' + ((-1 * eye_sight) + 100) + '&hatProbability=' + headgear + '" type="image/svg+xml">');
+                $('#avatar').replaceWith('<img width="250" height="250" style="-ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar"  src="https://dicebear-7227ab440045.herokuapp.com/9.x/pixel-art/svg?' + 'seed=' + seed + '&accessoriesProbability=' + accessory + '&beardProbability=' + facial_hair + '&glassesProbability=' + eye_sight + '&hatProbability=' + headgear + '" type="image/svg+xml">');
                 document.getElementById('gen_check').value = 1;
                 document.getElementById('seed').value = seed;
 
@@ -97,7 +97,7 @@ Please create your character below.
             var total = parseInt(accessory) + parseInt(facial_hair) + parseInt(eye_sight) + parseInt(headgear);
 
             if (total == 100) {
-                $('#avatar').replaceWith('<img width="250" height="250" style="-ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar"  src="https://dicebear-7227ab440045.herokuapp.com/9.x/pixel-art/svg?' + 'seed=' + seed + '&accessoriesProbability=' + accessory + '&beardProbability=' + facial_hair + '&glassesProbability=' + ((-1 * eye_sight) + 100) + '&hatProbability=' + headgear + '" type="image/svg+xml">');
+                $('#avatar').replaceWith('<img width="250" height="250" style="-ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar"  src="https://dicebear-7227ab440045.herokuapp.com/9.x/pixel-art/svg?' + 'seed=' + seed + '&accessoriesProbability=' + accessory + '&beardProbability=' + facial_hair + '&glassesProbability=' + eye_sight + '&hatProbability=' + headgear + '" type="image/svg+xml">');
                 document.getElementById('gen_check').value = 1;
 
             } else {

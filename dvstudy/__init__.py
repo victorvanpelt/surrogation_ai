@@ -35,8 +35,7 @@ class C(BaseConstants):
     MODEL = "gpt-4o"
 
     ## set character prompt. According to openAI's documentation, this should be less than ~1500 words
-    CHARACTER_PROMPT_A = """        
-    """
+    CHARACTER_PROMPT_A = """ Never use any markdown or formatting in your answers."""
 
     #PEQ
     STANDARDCHOICESFIVE = [
@@ -95,14 +94,10 @@ class Player(BasePlayer):
     main_name = models.StringField(blank=True)
 
     #features
-    accessory = models.IntegerField(blank=True)
-    facial_hair = models.IntegerField(blank=True)
-    eye_sight = models.IntegerField(blank=True)
-    headgear = models.IntegerField(blank=True)
-
-    # radius = models.IntegerField(blank=True)
-    # size = models.IntegerField(blank=True)
-    # scale = models.IntegerField(blank=True)
+    accessory = models.IntegerField(blank=True, label="Accessory")
+    facial_hair = models.IntegerField(blank=True, label="Facial Hair")
+    eye_sight = models.IntegerField(blank=True, label="Glasses")
+    headgear = models.IntegerField(blank=True, label="Headgear")
 
     #chatgpt
     ai_condition = models.IntegerField(blank=True)
@@ -198,7 +193,7 @@ class Player(BasePlayer):
         choices=[
             [1, 'Accessories'],
             [2, 'Facial Hair'],
-            [3, 'Eye Sight'],
+            [3, 'Glasses'],
             [4, 'Head Gear'],
             [5, 'Each attribute contributed equally'],
         ],
@@ -247,7 +242,7 @@ def creating_session(subsession: Subsession):
     # randomize to treatments
     # Now always set to surrotation treatment
     treats = itertools.cycle([1, 2, 3])
-    # skill_focus = itertools.cycle(['Accessory', 'Facial Hair', 'Eye Sight', 'Head Gear',])
+    # skill_focus = itertools.cycle(['Accessory', 'Facial Hair', 'Glasses', 'Head Gear',])
     expConditions = itertools.cycle([1, 0])
     skill_focus = itertools.cycle(['Facial Hair'])
     for player in subsession.get_players():
