@@ -532,6 +532,11 @@ class Peq_demo(Page):
         'email'
     ]
 
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        participant = player.participant
+        participant.finished = True
+
 class Final(Page):
     pass
 

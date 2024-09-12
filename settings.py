@@ -4,19 +4,19 @@ from os import environ
 SESSION_CONFIGS = [
      dict(
          name='chatGPT',
-         app_sequence=['chatGPT',],
+         app_sequence=['chatGPT'],
          num_demo_participants=2,
          prompt=""
      ),
     dict(
         name='Surrogation',
-        app_sequence=['surrogation', ],
+        app_sequence=['surrogation'],
         num_demo_participants=2,
         surrogation="",
     ),
     dict(
         name='dvstudy',
-        app_sequence=['dvstudy', ],
+        app_sequence=['dvstudy'],
         num_demo_participants=16,
         surrogation="",
         prompt="",
@@ -32,8 +32,8 @@ SESSION_CONFIG_DEFAULTS = dict(
     real_world_currency_per_point=1.00, participation_fee=0.80, doc=""
 )
 
-PARTICIPANT_FIELDS = ["condition", "ai_condition", "surrogation"]
-SESSION_FIELDS = []
+PARTICIPANT_FIELDS = ["condition", "ai_condition", "surrogation", "finished"]
+SESSION_FIELDS = ["prolific_completion_url"]
 
 
 # rooms
