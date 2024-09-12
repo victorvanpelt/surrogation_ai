@@ -35,6 +35,9 @@ class C(BaseConstants):
     ## set character prompt. According to openAI's documentation, this should be less than ~1500 words
     CHARACTER_PROMPT_A = """ Never use any markdown or formatting in your answers."""
 
+    ## Set how many requests users can make
+    maximum_requests = 25
+
     #PEQ
     STANDARDCHOICESFIVE = [
         [1, 'Strongly agree'],
@@ -67,6 +70,9 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
+    #counter tracking number of user requests GPT
+    gpt_requests = models.IntegerField(initial=0)
+
     #instructions
     accept_instructions = models.BooleanField(blank=False, widget=widgets.CheckboxInput)
     Instr1 = models.IntegerField(
@@ -310,8 +316,6 @@ def creating_session(subsession: Subsession):
         # set prompt based on condition
         player.msg = json.dumps([{"role": "system", "content": C.CHARACTER_PROMPT_A}])
 
-
-
 # custom export of chatLog
 def custom_export(players):
     # header row
@@ -370,7 +374,6 @@ class Introduction1(Page):
             return 'Your answer is incorrect. You can win an online shopping gift voucher of 50 pounds depending on how well you perform on the task compared to others.'
 
 
-
 class Introduction2(Page):
     form_model = 'player'
     form_fields = ['Instr2']
@@ -388,10 +391,12 @@ class Introduction3(Page):
         if value["Instr3"] != 1:
             return 'Your answer is incorrect. Distributing the 100 points to the different attributes determines their importance for your character.'
 
+
 class Introduction4(Page):
     @staticmethod
     def is_displayed(player: Player):
         return player.ai_condition == 1
+
 
 class Choice(Page):
     form_model = 'player'
@@ -427,42 +432,45 @@ class Choice(Page):
 
     @staticmethod
     def live_method(player: Player, data):
+        MAX_REQUESTS = C.maximum_requests  # Set the maximum number of allowed GPT prompts
 
-        # start GPT with prompt based on randomized ai_condition
-        # set chatgpt api key
-        #openai.api_key = CHATGPT_KEY
+        # Check if the player has reached the maximum number of GPT requests
+        if player.gpt_requests >= MAX_REQUESTS:
+            return {player.id_in_group: "You have reached the maximum number of requests!"}
+
+        # Otherwise, continue with processing the GPT request
         client.api_key = environ.get('OPENAI_API_KEY')
         print('OpenAI key is', environ.get('OPENAI_API_KEY'))
 
-        # load msg
+        # Load the current conversation messages
         messages = json.loads(player.msg)
 
-        # functions for retrieving text from openAI
+        # Functions for retrieving text from OpenAI
         if 'text' in data:
-            # grab text that participant inputs and format for chatgpt
+            # Grab text that participant inputs and format for ChatGPT
             text = data['text']
             inputMsg = {'role': 'user', 'content': text}
             botMsg = {'role': 'assistant', 'content': text}
 
-            # append messages and run chatgpt function
+            # Append messages and run ChatGPT function
             messages.append(inputMsg)
             output = runGPT(messages)
 
-            # also append messages with bot message
+            # Also append messages with bot message
             botMsg = {'role': 'assistant', 'content': output}
             messages.append(botMsg)
 
-            # write appended messages to database
+            # Write appended messages to database
             player.msg = json.dumps(messages)
 
+            # Increment the counter for GPT requests
+            player.gpt_requests += 1
+
+            # Return the output to the user
             return {player.id_in_group: output}
         else:
             pass
 
-    @staticmethod
-    def before_next_page(player, timeout_happened):
-        return {
-        }
 
 class Peq_intro(Page):
     pass
