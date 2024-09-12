@@ -37,7 +37,34 @@
     <hr>
         Please create your character below.
     <hr>
-    <div class="wrapper" style="overflow: hidden;">
+<!--    <div class="wrapper" style="overflow: hidden;">-->
+<!--    <div class="column" style="float:left; text-align: left; width: 40%; margin-left: 1%;">-->
+<!--        {% formfield player.main_name label="Name" %}-->
+<!--        <hr>-->
+<!--        {% for field in form %}-->
+<!--            {% if field.name in ['accessory', 'facial_hair', 'eye_sight', 'headgear'] %}-->
+<!--                {% formfield field.name %}-->
+<!--            {% endif %}-->
+<!--        {% endfor %}-->
+<!--        <p></p>-->
+<!--    </div>-->
+<!--    <div class="column" style="float:right; width: 30%; margin-right: 15%;  position: relative;">-->
+<!--            <img style="width:275px; height:275px; -ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar" src="{% static "dvstudy/start.jpg" %}"/>-->
+<!--        <p></p>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <p></p>-->
+<!--    <div class="wrapper" style="overflow: hidden;">-->
+<!--    <div class="column" style="float:left; text-align: left; width: 40%; margin-left: 1%;: center">-->
+<!--                <button type="button" class="btn btn-outline-primary" data-toggle="collapse" id="button_up">Update Features</button>-->
+<!--        <p></p>-->
+<!--    </div>-->
+<!--    <div class="column" style="float:right; width: 30%; margin-right: 11%;  position: relative;">-->
+<!--        <button type="button" class="btn btn-outline-primary" data-toggle="collapse" id="button_gen">Randomize Character</button>-->
+<!--    </div>-->
+<!--    </div>-->
+
+<div class="wrapper" style="overflow-x: auto; white-space: nowrap;">
     <div class="column" style="float:left; text-align: left; width: 40%; margin-left: 1%;">
         {% formfield player.main_name label="Name" %}
         <hr>
@@ -48,21 +75,21 @@
         {% endfor %}
         <p></p>
     </div>
-    <div class="column" style="float:right; width: 30%; margin-right: 15%;  position: relative;">
-            <img style="width:275px; height:275px; -ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar" src="{% static "dvstudy/start.jpg" %}"/>
-        <p></p>
-        </div>
-    </div>
-    <p></p>
-    <div class="wrapper" style="overflow: hidden;">
-    <div class="column" style="float:left; text-align: left; width: 40%; margin-left: 1%;: center">
-                <button type="button" class="btn btn-outline-primary" data-toggle="collapse" id="button_up">Update Features</button>
+    <div class="column" style="float:right; width: 30%; margin-right: 15%; position: relative;">
+        <img style="width:275px; height:275px; -ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar" src="{% static "dvstudy/start.jpg" %}"/>
         <p></p>
     </div>
-    <div class="column" style="float:right; width: 30%; margin-right: 11%;  position: relative;">
+</div>
+<p></p>
+<div class="wrapper" style="overflow-x: auto; white-space: nowrap;">
+    <div class="column" style="float:left; text-align: left; width: 40%; margin-left: 1%;">
+        <button type="button" class="btn btn-outline-primary" data-toggle="collapse" id="button_up">Update Features</button>
+        <p></p>
+    </div>
+    <div class="column" style="float:right; width: 30%; margin-right: 11%; position: relative;">
         <button type="button" class="btn btn-outline-primary" data-toggle="collapse" id="button_gen">Randomize Character</button>
     </div>
-    </div>
+</div>
 
 
     <p></p>

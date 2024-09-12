@@ -36,7 +36,7 @@ class C(BaseConstants):
     CHARACTER_PROMPT_A = """ Never use any markdown or formatting in your answers."""
 
     ## Set how many requests users can make
-    maximum_requests = 25
+    maximum_requests = 30
 
     #PEQ
     STANDARDCHOICESFIVE = [
