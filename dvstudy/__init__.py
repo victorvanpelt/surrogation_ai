@@ -30,7 +30,7 @@ class C(BaseConstants):
     ## model
     ## this is which gpt model to use, which have different prices and ability
     ## https://platform.openai.com/docs/models
-    MODEL = "GPT-4o"
+    MODEL = "gpt-4o"
 
     ## set character prompt. According to openAI's documentation, this should be less than ~1500 words
     CHARACTER_PROMPT_A = """ Never use any markdown or formatting in your answers."""
