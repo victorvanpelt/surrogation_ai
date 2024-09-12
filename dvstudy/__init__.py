@@ -32,7 +32,7 @@ class C(BaseConstants):
     ## model
     ## this is which gpt model to use, which have different prices and ability
     ## https://platform.openai.com/docs/models
-    MODEL = "gpt-4o"
+    MODEL = "GPT-4o mini"
 
     ## set character prompt. According to openAI's documentation, this should be less than ~1500 words
     CHARACTER_PROMPT_A = """ Never use any markdown or formatting in your answers."""
@@ -369,7 +369,7 @@ class Introduction1(Page):
 
     def error_message(player: Player, value):
         if value["Instr1"] != 1:
-            return 'Your answer is incorrect. You can win an online shopping gift voucher of 50 CHF depending on how well you perform on the task compared to others.'
+            return 'Your answer is incorrect. You can win an online shopping gift voucher of 50 pounds depending on how well you perform on the task compared to others.'
 
 
 
