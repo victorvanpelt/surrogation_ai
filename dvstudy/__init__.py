@@ -5,8 +5,6 @@ from otree.api import *
 from os import environ
 from openai import OpenAI
 import json
-import os
-import requests
 
 client = OpenAI(
   api_key=environ.get('OPENAI_API_KEY'),
