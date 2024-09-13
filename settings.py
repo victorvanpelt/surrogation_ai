@@ -29,7 +29,7 @@ SESSION_CONFIGS = [
 # e.g. self.session.config['participation_fee']
 
 SESSION_CONFIG_DEFAULTS = dict(
-    real_world_currency_per_point=1.00, participation_fee=0.80, doc=""
+    real_world_currency_per_point=1.00, participation_fee=3.00, doc=""
 )
 
 PARTICIPANT_FIELDS = ["condition", "ai_condition", "surrogation", "finished"]
@@ -50,7 +50,7 @@ ROOMS = [
 LANGUAGE_CODE = 'en'
 
 # e.g. EUR, GBP, CNY, JPY
-REAL_WORLD_CURRENCY_CODE = 'GBP'
+REAL_WORLD_CURRENCY_CODE = 'EUR'
 USE_POINTS = False
 
 ADMIN_USERNAME = 'admin'

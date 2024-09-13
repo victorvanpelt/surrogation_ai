@@ -371,7 +371,7 @@ class Introduction1(Page):
 
     def error_message(player: Player, value):
         if value["Instr1"] != 1:
-            return 'Your answer is incorrect. You can win an online shopping gift voucher of 50 pounds depending on how well you perform on the task compared to others.'
+            return 'Your answer is incorrect. You can win an online shopping gift voucher of 50 CHF depending on how well you perform on the task compared to others.'
 
 
 class Introduction2(Page):
