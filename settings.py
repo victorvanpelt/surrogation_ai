@@ -39,7 +39,7 @@ SESSION_CONFIGS = [
 # e.g. self.session.config['participation_fee']
 
 SESSION_CONFIG_DEFAULTS = dict(
-    real_world_currency_per_point=1.00, participation_fee=3.00, doc=""
+    real_world_currency_per_point=1.00, participation_fee=0.8, doc=""
 )
 
 PARTICIPANT_FIELDS = ["condition", "ai_condition", "surrogation", "finished"]
