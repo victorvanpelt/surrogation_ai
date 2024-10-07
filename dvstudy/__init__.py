@@ -159,14 +159,6 @@ class Player(BasePlayer):
             [1, 'True'],
         ],
     )
-    measure_check = models.IntegerField(
-        label="This study measures whether each participant allocates points to 'Facial Hair.'",
-        blank=False,
-        choices=[
-            [0, 'False'],
-            [1, 'True'],
-        ],
-    )
     prompt_check = models.IntegerField(
         label="On the screen where I designed the character, I could send multiple prompts/messages to ChatGPT.",
         blank=False,
@@ -499,7 +491,6 @@ class Peq_one(Page):
     form_model = 'player'
     form_fields = [
         'ai_check',
-        'measure_check',
         'difficulty',
         'clarity',
         'most_imp_attribute',
@@ -512,7 +503,6 @@ class Peq_one(Page):
     def get_form_fields(player: Player):
         fields = [
             'ai_check',
-            'measure_check',
             'difficulty',
             'clarity',
             'most_imp_attribute',
