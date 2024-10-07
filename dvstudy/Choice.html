@@ -13,7 +13,7 @@
         {% elif player.prompt_condition == 1 %}
             Consult ChatGPT for help by typing <b>exactly one</b> prompt (or message) in the Chatbox below.
         {% elif player.prompt_condition == 2 %}
-            Consult ChatGPT for help by typing prompts (or messages) in the Chatbox below.
+            Consult ChatGPT for help by typing <b>multiple</b> prompts (or messages) in the Chatbox below.
         {% endif %}
     <hr>
     <!-- div displaying chat messages -->
@@ -147,7 +147,7 @@
             var messageCount = chatLogData.length;
 
             // Check the prompt condition and the number of messages sent
-            if ((promptCondition === 1 && messageCount < 1) || (promptCondition === 2 && messageCount < 1)) {
+            if ((promptCondition === 1 && messageCount < 1) || (promptCondition === 2 && messageCount < 2)) {
                 alert("Please send prompts (or messages) in the chat before proceeding.");
                 return; // Stop further execution if conditions are not met
 }

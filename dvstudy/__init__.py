@@ -444,7 +444,7 @@ class Choice(Page):
         if player.prompt_condition == 1:
             MAX_REQUESTS = 1
         elif player.prompt_condition == 2:
-            MAX_REQUESTS = 4
+            MAX_REQUESTS = C.maximum_requests
         else:
             MAX_REQUESTS = C.maximum_requests  # Default to the global maximum if prompt_condition is 0
 
