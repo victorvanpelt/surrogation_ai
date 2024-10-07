@@ -90,7 +90,7 @@ class Player(BasePlayer):
     save_image = models.BooleanField(blank=True, widget=widgets.CheckboxInput)
     surrogation = models.IntegerField()
     measure_skill = models.StringField()
-    # avatar = models.StringField()
+    prompt_condition = models.IntegerField(blank=True, initial=0)
     seed = models.IntegerField(initial=0)
     url = models.StringField()
 
@@ -148,6 +148,7 @@ class Player(BasePlayer):
         [10, '10 (Excellent)']
     ])
     email = models.StringField(label="Please leave your email-address to receive the show-up fee and a chance to win one of the online shopping gift vouchers", blank=True)
+    pid = models.StringField(label="Please leave your Prolific ID to have a chance to win one of the online shopping gift vouchers", blank=True)
 
     #PEQ - One
     ai_check = models.IntegerField(
@@ -160,6 +161,14 @@ class Player(BasePlayer):
     )
     measure_check = models.IntegerField(
         label="This study measures whether each participant allocates points to 'Facial Hair.'",
+        blank=False,
+        choices=[
+            [0, 'False'],
+            [1, 'True'],
+        ],
+    )
+    prompt_check = models.IntegerField(
+        label="On the screen where I designed the character, I could send multiple prompts/messages to ChatGPT.",
         blank=False,
         choices=[
             [0, 'False'],
@@ -245,7 +254,8 @@ class Player(BasePlayer):
 def creating_session(subsession: Subsession):
     # randomize to treatments
     # Now always set to surrotation treatment
-    treats = itertools.cycle([1, 2, 3])
+    treats1 = itertools.cycle([1, 2, 3])
+    treats2 = itertools.cycle([1, 2])
     # skill_focus = itertools.cycle(['Accessory', 'Facial Hair', 'Glasses', 'Head Gear',])
     expConditions = itertools.cycle([1, 0])
     skill_focus = itertools.cycle(['Facial Hair'])
@@ -276,43 +286,41 @@ def creating_session(subsession: Subsession):
 
         # randomize everything
         else:
-            #determine treatment
-            choose_treat = next(treats)
-            if choose_treat == 1:
-                player.surrogation = 0
-                player.ai_condition = 0
-            elif choose_treat == 2:
-                player.surrogation = 1
-                player.ai_condition = 0
-            else:
-                player.surrogation = 1
-                player.ai_condition = 1
-            # player.surrogation = next(treats)
-            # # randomize AI prompt and save to player var
-            # if player.surrogation == 1:
-            #     if player.session.config['ai_condition'] != "":
-            #         player.ai_condition = player.session.config['ai_condition']
-            #     else:
-            #         player.ai_condition = next(expConditions)
-            #         player.participant.vars['ai_condition'] = player.ai_condition
-            # elif player.surrogation == 0:
-            #     player.ai_condition = 0
-            #     player.participant.vars['ai_condition'] = player.ai_condition
-            print('set player.ai_condition to', player.ai_condition)
-            print('set player.surrogation to', player.surrogation)
+            if player.session.config['prompting']==0:
+                #determine treatment
+                choose_treat = next(treats1)
+                if choose_treat == 1:
+                    player.surrogation = 0
+                    player.ai_condition = 0
+                elif choose_treat == 2:
+                    player.surrogation = 1
+                    player.ai_condition = 0
+                else:
+                    player.surrogation = 1
+                    player.ai_condition = 1
+                print('set player.ai_condition to', player.ai_condition)
+                print('set player.surrogation to', player.surrogation)
+            elif player.session.config['prompting']==1:
+                #determine treatment
+                choose_treat2 = next(treats2)
+                if choose_treat2 == 1:
+                    player.surrogation = 1
+                    player.ai_condition = 1
+                    player.prompt_condition = 1
+                else:
+                    player.surrogation = 1
+                    player.ai_condition = 1
+                    player.prompt_condition = 2
+                print('set player.ai_condition to', player.ai_condition)
+                print('set player.surrogation to', player.surrogation)
+                print('set player.prompt_condition to', player.prompt_condition)
 
-        # set skill
+        # set skill always to facial hair
         if player.surrogation == 1:
             player.measure_skill = next(skill_focus)
             print('set player.measure_skill to', player.measure_skill)
 
-    # randomize avatar condition
-    # Now always set to avatar treatment
     for player in subsession.get_players():
-        # player.avatar = random.choice(['yes', 'no'])
-        # player.avatar = 'yes'
-        # print('set player.avatar to', player.avatar)
-
         # set prompt based on condition
         player.msg = json.dumps([{"role": "system", "content": C.CHARACTER_PROMPT_A}])
 
@@ -371,7 +379,7 @@ class Introduction1(Page):
 
     def error_message(player: Player, value):
         if value["Instr1"] != 1:
-            return 'Your answer is incorrect. You can win an online shopping gift voucher of 50 CHF depending on how well you perform on the task compared to others.'
+            return 'Your answer is incorrect. You can win an online shopping gift voucher of 50 pounds depending on how well you perform on the task compared to others.'
 
 
 class Introduction2(Page):
@@ -432,11 +440,23 @@ class Choice(Page):
 
     @staticmethod
     def live_method(player: Player, data):
-        MAX_REQUESTS = C.maximum_requests  # Set the maximum number of allowed GPT prompts
+        # Define the maximum number of requests based on the player's prompt condition
+        if player.prompt_condition == 1:
+            MAX_REQUESTS = 1
+        elif player.prompt_condition == 2:
+            MAX_REQUESTS = 4
+        else:
+            MAX_REQUESTS = C.maximum_requests  # Default to the global maximum if prompt_condition is 0
 
-        # Check if the player has reached the maximum number of GPT requests
+        # Check if the player has reached the maximum number of allowed GPT requests
         if player.gpt_requests >= MAX_REQUESTS:
-            return {player.id_in_group: "You have reached the maximum number of requests!"}
+            return {player.id_in_group: "You have reached the maximum number of allowed requests!"}
+        #
+        # MAX_REQUESTS = C.maximum_requests  # Set the maximum number of allowed GPT prompts
+        #
+        # # Check if the player has reached the maximum number of GPT requests
+        # if player.gpt_requests >= MAX_REQUESTS:
+        #     return {player.id_in_group: "You have reached the maximum number of requests!"}
 
         # Otherwise, continue with processing the GPT request
         client.api_key = environ.get('OPENAI_API_KEY')
@@ -484,7 +504,8 @@ class Peq_one(Page):
         'clarity',
         'most_imp_attribute',
         'ai_helpful',
-        'ai_usage'
+        'ai_usage',
+        'prompt_check'
     ]
 
     @staticmethod
@@ -496,7 +517,8 @@ class Peq_one(Page):
             'clarity',
             'most_imp_attribute',
             'ai_helpful',
-            'ai_usage'
+            'ai_usage',
+            'prompt_check'
         ]
         random.shuffle(fields)
         return fields
@@ -529,7 +551,7 @@ class Peq_demo(Page):
         'gender',
         'age',
         'english',
-        'email'
+        'pid'
     ]
 
     @staticmethod
@@ -541,4 +563,10 @@ class Final(Page):
     pass
 
 
-page_sequence = [Welcome, Introduction1, Introduction2, Introduction3, Introduction4, Choice, Peq_intro, Peq_one, Peq_demo, Final]
+page_sequence = [
+    # Welcome,
+    # Introduction1,
+    # Introduction2,
+    # Introduction3,
+    Introduction4,
+    Choice, Peq_intro, Peq_one, Peq_demo, Final]
