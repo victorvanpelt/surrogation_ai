@@ -554,9 +554,9 @@ class Final(Page):
 
 
 page_sequence = [
-    # Welcome,
-    # Introduction1,
-    # Introduction2,
-    # Introduction3,
+    Welcome,
+    Introduction1,
+    Introduction2,
+    Introduction3,
     Introduction4,
     Choice, Peq_intro, Peq_one, Peq_demo, Final]
