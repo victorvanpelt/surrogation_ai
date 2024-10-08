@@ -147,10 +147,10 @@
             var messageCount = chatLogData.length;
 
             // Check the prompt condition and the number of messages sent
-            if ((promptCondition === 1 && messageCount < 1) || (promptCondition === 2 && messageCount < 2)) {
+            if ((promptCondition === 1 && messageCount < 1) || (promptCondition === 2 && messageCount < 3)) {
                 alert("Please send prompts (or messages) in the chat before proceeding.");
                 return; // Stop further execution if conditions are not met
-}
+            }
 
             if ($('#gen_check').val() == 1 && $('#id_main_name').val() != '') {
                 if ($('#id_save_image').is(':checked')) {
