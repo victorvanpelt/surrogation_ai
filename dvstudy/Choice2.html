@@ -38,40 +38,20 @@
     <hr>
         Please create your character below.
     <hr>
-
-<div class="wrapper" style="overflow-x: auto; white-space: nowrap;">
-    <div class="column" style="float:left; text-align: left; width: 40%; margin-left: 1%;">
-        {% formfield player.main_name label="Name" %}
-        <hr>
-        {% for field in form %}
-            {% if field.name in ['accessory', 'facial_hair', 'eye_sight', 'headgear'] %}
-                {% formfield field.name %}
-            {% endif %}
-        {% endfor %}
-        <p></p>
-    </div>
-    <div class="column" style="float:right; width: 30%; margin-right: 15%; position: relative;">
-        <img style="width:275px; height:275px; -ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar" src="{% static "dvstudy/start.jpg" %}"/>
-        <p></p>
-    </div>
-</div>
-<p></p>
-<div class="wrapper" style="overflow-x: auto; white-space: nowrap;">
-    <div class="column" style="float:left; text-align: left; width: 40%; margin-left: 1%;">
-        <button type="button" class="btn btn-outline-primary" data-toggle="collapse" id="button_up">Update Features</button>
-        <p></p>
-    </div>
-    <div class="column" style="float:right; width: 30%; margin-right: 11%; position: relative;">
-        <button type="button" class="btn btn-outline-primary" data-toggle="collapse" id="button_gen">Randomize Character</button>
-    </div>
-</div>
+    {% formfield player.main_name label="Name" %}
+    <hr>
+    {% for field in form %}
+        {% if field.name in ['accessory', 'facial_hair', 'eye_sight', 'headgear'] %}
+            {% formfield field.name %}
+        {% endif %}
+    {% endfor %}
     <p></p>
     <div style="align: center;">
     <hr>
-    {% formfield player.save_image label="I want to download and keep the avatar I created." %}
+    {% formfield player.save_image label="I want to download and keep the avatar I create." %}
     <p></p>
+    <img type="hidden" style="width:275px; height:275px; -ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar" src="{% static "dvstudy/start.jpg" %}"/>
     <input type="hidden" name="url" value="">
-    <input type="hidden" id="gen_check" name="gen_check" value="0">
     <input type="hidden" id="randomize_count" name="randomize_count" value="0">
     <button type="button_next" class="btn btn-primary" id="button_next">
         Next
@@ -90,63 +70,6 @@
     </script>
 
     <script>
-        $('#button_gen').on('click', function() {
-            var accessory = $('input[name=accessory]').val();
-            var facial_hair = $('input[name=facial_hair]').val();
-            var eye_sight = $('input[name=eye_sight]').val();
-            var headgear = $('input[name=headgear]').val();
-            accessory = accessory || "0";
-            facial_hair = facial_hair || "0";
-            eye_sight = eye_sight || "0";
-            headgear = headgear || "0";
-            let max = 10000;
-            let seed = Math.floor(Math.random() * max);
-            var total = parseInt(accessory) + parseInt(facial_hair) + parseInt(eye_sight) + parseInt(headgear);
-
-            if (total == 100) {
-                $('#avatar').replaceWith('<img width="250" height="250" style="-ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar"  src="https://dicebear-7227ab440045.herokuapp.com/9.x/pixel-art/svg?' + 'seed=' + seed + '&accessoriesProbability=' + accessory + '&beardProbability=' + facial_hair + '&glassesProbability=' + eye_sight + '&hatProbability=' + headgear + '" type="image/svg+xml">');
-                document.getElementById('gen_check').value = 1;
-
-                // Increment randomize_count by 1
-                var randomizeCount = parseInt($('input[name=randomize_count]').val()) || 0;
-                randomizeCount += 1;
-                $('input[name=randomize_count]').val(randomizeCount);
-            } else {
-                window.alert("Please ensure the total allocated points adds up to 100.");
-            }
-        })
-
-    </script>
-
-    <script>
-        $('#button_up').on('click', function() {
-            var accessory = $('input[name=accessory]').val();
-            var facial_hair = $('input[name=facial_hair]').val();
-            var eye_sight = $('input[name=eye_sight]').val();
-            var headgear = $('input[name=headgear]').val();
-            accessory = accessory || "0";
-            facial_hair = facial_hair || "0";
-            eye_sight = eye_sight || "0";
-            headgear = headgear || "0";
-            var seed = {{ player.seed }};
-            var total = parseInt(accessory) + parseInt(facial_hair) + parseInt(eye_sight) + parseInt(headgear);
-
-            if (total == 100) {
-                $('#avatar').replaceWith('<img width="250" height="250" style="-ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar"  src="https://dicebear-7227ab440045.herokuapp.com/9.x/pixel-art/svg?' + 'seed=' + seed + '&accessoriesProbability=' + accessory + '&beardProbability=' + facial_hair + '&glassesProbability=' + eye_sight + '&hatProbability=' + headgear + '" type="image/svg+xml">');
-                document.getElementById('gen_check').value = 1;
-
-                // Increment randomize_count by 1
-                var randomizeCount = parseInt($('input[name=randomize_count]').val()) || 0;
-                randomizeCount += 1;
-                $('input[name=randomize_count]').val(randomizeCount);
-            } else {
-                window.alert("Please ensure the total score for the features adds up to 100.");
-            }
-        })
-
-    </script>
-
-    <script>
         $('#button_next').on('click', function (event) {
             event.preventDefault ? event.preventDefault() : event.returnValue = false;
 
@@ -160,8 +83,20 @@
                 return; // Stop further execution if conditions are not met
             }
 
-            if ($('#gen_check').val() == 1 && $('#id_main_name').val() != '') {
+            var accessory = $('input[name=accessory]').val();
+            var facial_hair = $('input[name=facial_hair]').val();
+            var eye_sight = $('input[name=eye_sight]').val();
+            var headgear = $('input[name=headgear]').val();
+            accessory = accessory || "0";
+            facial_hair = facial_hair || "0";
+            eye_sight = eye_sight || "0";
+            headgear = headgear || "0";
+            var seed = {{ player.seed }};
+            var total = parseInt(accessory) + parseInt(facial_hair) + parseInt(eye_sight) + parseInt(headgear);
+
+            if (total == 100 && $('#id_main_name').val() != '') {
                 if ($('#id_save_image').is(':checked')) {
+                    $('#avatar').replaceWith('<img type="hidden" width="250" height="250" style="-ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar"  src="https://dicebear-7227ab440045.herokuapp.com/9.x/pixel-art/svg?' + 'seed=' + seed + '&accessoriesProbability=' + accessory + '&beardProbability=' + facial_hair + '&glassesProbability=' + eye_sight + '&hatProbability=' + headgear + '" type="image/svg+xml">');
                     const svgElement = document.getElementById('avatar');
                     const serializer = new XMLSerializer();
                     const svgBlob = new Blob([serializer.serializeToString(svgElement)], {type: 'image/svg+xml'});
@@ -182,8 +117,8 @@
                 $('input[name=url]').val(imgSrc);
                 document.forms[0].submit();
                 $('#form').submit();
-            } else if ($('#gen_check').val() != 1 && $('#id_main_name').val() != '') {
-                alert("Please generate a character to continue.");
+            } else if (total == 100 != 100 && $('#id_main_name').val() != '') {
+                alert("Please ensure the total score for the features adds up to 100.");
             } else {
                 alert("Please give your character a name to continue.");
             }

@@ -287,12 +287,15 @@ def creating_session(subsession: Subsession):
                 if choose_treat == 1:
                     player.surrogation = 0
                     player.ai_condition = 0
+                    player.exploratory = 1
                 elif choose_treat == 2:
                     player.surrogation = 1
                     player.ai_condition = 0
+                    player.exploratory = 1
                 else:
                     player.surrogation = 1
                     player.ai_condition = 1
+                    player.exploratory = 1
                 print('set player.ai_condition to', player.ai_condition)
                 print('set player.surrogation to', player.surrogation)
             elif player.session.config['prompting']==1:
@@ -303,10 +306,12 @@ def creating_session(subsession: Subsession):
                         player.surrogation = 1
                         player.ai_condition = 1
                         player.prompt_condition = 1
+                        player.exploratory = 1
                     else:
                         player.surrogation = 1
                         player.ai_condition = 1
                         player.prompt_condition = 2
+                        player.exploratory = 1
                     print('set player.ai_condition to', player.ai_condition)
                     print('set player.surrogation to', player.surrogation)
                     print('set player.prompt_condition to', player.prompt_condition)
@@ -463,6 +468,99 @@ class Choice(Page):
         return randomized_fields + fixed_fields  # Combine randomized and fixed fields
 
     @staticmethod
+    def is_displayed(player):
+        return player.exploratory == 1
+
+    @staticmethod
+    def live_method(player: Player, data):
+        # Define the maximum number of requests based on the player's prompt condition
+        if player.prompt_condition == 1:
+            MAX_REQUESTS = 1
+        elif player.prompt_condition == 2:
+            MAX_REQUESTS = C.maximum_requests
+        else:
+            MAX_REQUESTS = C.maximum_requests  # Default to the global maximum if prompt_condition is 0
+
+        # Check if the player has reached the maximum number of allowed GPT requests
+        if player.gpt_requests >= MAX_REQUESTS:
+            return {player.id_in_group: "You have reached the maximum number of allowed requests!"}
+        #
+        # MAX_REQUESTS = C.maximum_requests  # Set the maximum number of allowed GPT prompts
+        #
+        # # Check if the player has reached the maximum number of GPT requests
+        # if player.gpt_requests >= MAX_REQUESTS:
+        #     return {player.id_in_group: "You have reached the maximum number of requests!"}
+
+        # Otherwise, continue with processing the GPT request
+        client.api_key = environ.get('OPENAI_API_KEY')
+        print('OpenAI key is', environ.get('OPENAI_API_KEY'))
+
+        # Load the current conversation messages
+        messages = json.loads(player.msg)
+
+        # Functions for retrieving text from OpenAI
+        if 'text' in data:
+            # Grab text that participant inputs and format for ChatGPT
+            text = data['text']
+            inputMsg = {'role': 'user', 'content': text}
+            botMsg = {'role': 'assistant', 'content': text}
+
+            # Append messages and run ChatGPT function
+            messages.append(inputMsg)
+            output = runGPT(messages)
+
+            # Also append messages with bot message
+            botMsg = {'role': 'assistant', 'content': output}
+            messages.append(botMsg)
+
+            # Write appended messages to database
+            player.msg = json.dumps(messages)
+
+            # Increment the counter for GPT requests
+            player.gpt_requests += 1
+
+            # Return the output to the user
+            return {player.id_in_group: output}
+        else:
+            pass
+
+class Choice2(Page):
+    form_model = 'player'
+    form_fields = [
+        'accessory',
+        'facial_hair',
+        'eye_sight',
+        'headgear',
+        'chatLog',
+        'main_name',
+        'gen_check',
+        'url',
+        'save_image'
+    ]
+
+    @staticmethod
+    def get_form_fields(player: Player):
+        randomized_fields = [
+            'accessory',
+            'facial_hair',
+            'eye_sight',
+            'headgear'
+        ]
+        fixed_fields = [
+            'chatLog',
+            'main_name',
+            'gen_check',
+            'url',
+            'save_image'
+        ]
+        random.shuffle(randomized_fields)  # Randomize the order of these fields
+        return randomized_fields + fixed_fields  # Combine randomized and fixed fields
+
+    @staticmethod
+    def is_displayed(player):
+        return player.exploratory == 0
+
+    @staticmethod
     def live_method(player: Player, data):
         # Define the maximum number of requests based on the player's prompt condition
         if player.prompt_condition == 1:
@@ -591,4 +689,10 @@ page_sequence = [
     Introduction2,
     Introduction3,
     Introduction4,
-    Choice, Peq_intro, Peq_one, Peq_demo, Final]
+    Choice,
+    Choice2,
+    Peq_intro,
+    Peq_one,
+    Peq_demo,
+    Final
+]
