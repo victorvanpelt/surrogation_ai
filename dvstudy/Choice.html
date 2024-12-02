@@ -72,6 +72,7 @@
     <p></p>
     <input type="hidden" name="url" value="">
     <input type="hidden" id="gen_check" name="gen_check" value="0">
+    <input type="hidden" id="randomize_count" value="0">
     <button type="button_next" class="btn btn-primary" id="button_next">
         Next
     </button>
@@ -105,8 +106,11 @@
             if (total == 100) {
                 $('#avatar').replaceWith('<img width="250" height="250" style="-ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar"  src="https://dicebear-7227ab440045.herokuapp.com/9.x/pixel-art/svg?' + 'seed=' + seed + '&accessoriesProbability=' + accessory + '&beardProbability=' + facial_hair + '&glassesProbability=' + eye_sight + '&hatProbability=' + headgear + '" type="image/svg+xml">');
                 document.getElementById('gen_check').value = 1;
-                // document.getElementById('seed').value = seed;
 
+                // Increment randomize_count by 1
+                var randomizeCount = parseInt($('input[name=randomize_count]').val()) || 0;
+                randomizeCount += 1;
+                $('input[name=randomize_count]').val(randomizeCount);
             } else {
                 window.alert("Please ensure the total allocated points adds up to 100.");
             }

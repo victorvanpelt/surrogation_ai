@@ -21,7 +21,8 @@ SESSION_CONFIGS = [
         surrogation="",
         prompt="",
         ai_condition="",
-        prompting=0
+        prompting=0,
+        exploratory=0
     ),
     dict(
         name='dvstudy_experiment_two',
@@ -30,7 +31,18 @@ SESSION_CONFIGS = [
         surrogation="",
         prompt="",
         ai_condition="",
-        prompting=1
+        prompting=1,
+        exploratory=0
+    ),
+    dict(
+        name='dvstudy_experiment_three',
+        app_sequence=['dvstudy'],
+        num_demo_participants=16,
+        surrogation="",
+        prompt="",
+        ai_condition="",
+        prompting=1,
+        exploratory=1
     )
 ]
 # if you set a property in SESSION_CONFIG_DEFAULTS, it will be inherited by all configs

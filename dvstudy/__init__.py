@@ -91,8 +91,10 @@ class Player(BasePlayer):
     surrogation = models.IntegerField()
     measure_skill = models.StringField()
     prompt_condition = models.IntegerField(blank=True, initial=0)
+    exploratory = models.IntegerField(blank=True, initial=0)
     seed = models.IntegerField(initial=0)
     url = models.StringField()
+    randomize_count = models.IntegerField(blank=True, initial=0)
 
     #names
     main_name = models.StringField(blank=True)
@@ -248,6 +250,7 @@ def creating_session(subsession: Subsession):
     # Now always set to surrotation treatment
     treats1 = itertools.cycle([1, 2, 3])
     treats2 = itertools.cycle([1, 2])
+    treats3 = itertools.cycle([1, 2, 3, 4])
     # skill_focus = itertools.cycle(['Accessory', 'Facial Hair', 'Glasses', 'Head Gear',])
     expConditions = itertools.cycle([1, 0])
     skill_focus = itertools.cycle(['Facial Hair'])
@@ -294,18 +297,45 @@ def creating_session(subsession: Subsession):
                 print('set player.surrogation to', player.surrogation)
             elif player.session.config['prompting']==1:
                 #determine treatment
-                choose_treat2 = next(treats2)
-                if choose_treat2 == 1:
-                    player.surrogation = 1
-                    player.ai_condition = 1
-                    player.prompt_condition = 1
-                else:
-                    player.surrogation = 1
-                    player.ai_condition = 1
-                    player.prompt_condition = 2
-                print('set player.ai_condition to', player.ai_condition)
-                print('set player.surrogation to', player.surrogation)
-                print('set player.prompt_condition to', player.prompt_condition)
+                if player.session.config['exploratory']==0:
+                    choose_treat2 = next(treats2)
+                    if choose_treat2 == 1:
+                        player.surrogation = 1
+                        player.ai_condition = 1
+                        player.prompt_condition = 1
+                    else:
+                        player.surrogation = 1
+                        player.ai_condition = 1
+                        player.prompt_condition = 2
+                    print('set player.ai_condition to', player.ai_condition)
+                    print('set player.surrogation to', player.surrogation)
+                    print('set player.prompt_condition to', player.prompt_condition)
+                elif player.session.config['exploratory']==1:
+                    choose_treat3 = next(treats3)
+                    if choose_treat3 == 1:
+                        player.surrogation = 1
+                        player.ai_condition = 1
+                        player.prompt_condition = 1
+                        player.exploratory = 0
+                    elif choose_treat3 == 2:
+                        player.surrogation = 1
+                        player.ai_condition = 1
+                        player.prompt_condition = 1
+                        player.exploratory = 1
+                    elif choose_treat3 == 3:
+                        player.surrogation = 1
+                        player.ai_condition = 1
+                        player.prompt_condition = 2
+                        player.exploratory = 0
+                    else:
+                        player.surrogation = 1
+                        player.ai_condition = 1
+                        player.prompt_condition = 2
+                        player.exploratory = 1
+                    print('set player.ai_condition to', player.ai_condition)
+                    print('set player.surrogation to', player.surrogation)
+                    print('set player.prompt_condition to', player.prompt_condition)
+                    print('set player.exploratory to', player.exploratory)
 
         # set skill always to facial hair
         if player.surrogation == 1:
@@ -409,7 +439,8 @@ class Choice(Page):
         'main_name',
         'gen_check',
         'url',
-        'save_image'
+        'save_image',
+        'randomize_count'
     ]
 
     @staticmethod
@@ -425,7 +456,8 @@ class Choice(Page):
             'main_name',
             'gen_check',
             'url',
-            'save_image'
+            'save_image',
+            'randomize_count'
         ]
         random.shuffle(randomized_fields)  # Randomize the order of these fields
         return randomized_fields + fixed_fields  # Combine randomized and fixed fields
