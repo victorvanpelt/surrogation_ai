@@ -50,7 +50,7 @@
     <hr>
     {% formfield player.save_image label="I want to download and keep the avatar I create." %}
     <p></p>
-    <img type="hidden" style="width:275px; height:275px; -ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar" src="{% static "dvstudy/start.jpg" %}"/>
+    <img style="display: none; width:275px; height:275px; -ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar" src="{% static "dvstudy/start.jpg" %}"/>
     <input type="hidden" name="url" value="">
     <input type="hidden" id="randomize_count" name="randomize_count" value="0">
     <button type="button_next" class="btn btn-primary" id="button_next">
@@ -96,7 +96,7 @@
 
             if (total == 100 && $('#id_main_name').val() != '') {
                 if ($('#id_save_image').is(':checked')) {
-                    $('#avatar').replaceWith('<img type="hidden" width="250" height="250" style="-ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar"  src="https://dicebear-7227ab440045.herokuapp.com/9.x/pixel-art/svg?' + 'seed=' + seed + '&accessoriesProbability=' + accessory + '&beardProbability=' + facial_hair + '&glassesProbability=' + eye_sight + '&hatProbability=' + headgear + '" type="image/svg+xml">');
+                    $('#avatar').replaceWith('<img width="250" height="250" style="display: none; -ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar"  src="https://dicebear-7227ab440045.herokuapp.com/9.x/pixel-art/svg?' + 'seed=' + seed + '&accessoriesProbability=' + accessory + '&beardProbability=' + facial_hair + '&glassesProbability=' + eye_sight + '&hatProbability=' + headgear + '" type="image/svg+xml">');
                     const svgElement = document.getElementById('avatar');
                     const serializer = new XMLSerializer();
                     const svgBlob = new Blob([serializer.serializeToString(svgElement)], {type: 'image/svg+xml'});
