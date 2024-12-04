@@ -69,61 +69,76 @@
         $('#id_headgear').attr('autocomplete', 'off');
     </script>
 
-    <script>
-        $('#button_next').on('click', function (event) {
-            event.preventDefault ? event.preventDefault() : event.returnValue = false;
+<script>
+    $('#button_next').on('click', function (event) {
+        event.preventDefault ? event.preventDefault() : event.returnValue = false;
 
-            // Get the player's prompt condition and the number of messages sent
-            var promptCondition = {{ player.prompt_condition }};
-            var messageCount = chatLogData.length;
+        // Get the player's prompt condition and the number of messages sent
+        var promptCondition = {{ player.prompt_condition }};
+        var messageCount = chatLogData.length;
 
-            // Check the prompt condition and the number of messages sent
-            if ((promptCondition === 1 && messageCount < 1) || (promptCondition === 2 && messageCount < 3)) {
-                alert("Please send prompts (or messages) in the chat before proceeding.");
-                return; // Stop further execution if conditions are not met
-            }
+        // Check the prompt condition and the number of messages sent
+        if ((promptCondition === 1 && messageCount < 1) || (promptCondition === 2 && messageCount < 3)) {
+            alert("Please send prompts (or messages) in the chat before proceeding.");
+            return; // Stop further execution if conditions are not met
+        }
 
-            var accessory = $('input[name=accessory]').val();
-            var facial_hair = $('input[name=facial_hair]').val();
-            var eye_sight = $('input[name=eye_sight]').val();
-            var headgear = $('input[name=headgear]').val();
-            accessory = accessory || "0";
-            facial_hair = facial_hair || "0";
-            eye_sight = eye_sight || "0";
-            headgear = headgear || "0";
-            var seed = {{ player.seed }};
-            var total = parseInt(accessory) + parseInt(facial_hair) + parseInt(eye_sight) + parseInt(headgear);
+        var accessory = $('input[name=accessory]').val();
+        var facial_hair = $('input[name=facial_hair]').val();
+        var eye_sight = $('input[name=eye_sight]').val();
+        var headgear = $('input[name=headgear]').val();
+        accessory = accessory || "0";
+        facial_hair = facial_hair || "0";
+        eye_sight = eye_sight || "0";
+        headgear = headgear || "0";
+        var seed = {{ player.seed }};
+        var total = parseInt(accessory) + parseInt(facial_hair) + parseInt(eye_sight) + parseInt(headgear);
 
-            if (total == 100 && $('#id_main_name').val() != '') {
-                if ($('#id_save_image').is(':checked')) {
-                    $('#avatar').replaceWith('<img width="250" height="250" style="display: none; -ms-transform: translate(0%, 30%); transform: translate(0%, 30%);" id="avatar"  src="https://dicebear-7227ab440045.herokuapp.com/9.x/pixel-art/svg?' + 'seed=' + seed + '&accessoriesProbability=' + accessory + '&beardProbability=' + facial_hair + '&glassesProbability=' + eye_sight + '&hatProbability=' + headgear + '" type="image/svg+xml">');
-                    const svgElement = document.getElementById('avatar');
-                    const serializer = new XMLSerializer();
-                    const svgBlob = new Blob([serializer.serializeToString(svgElement)], {type: 'image/svg+xml'});
-                    const blobUrl = URL.createObjectURL(svgBlob);
+        if (total == 100 && $('#id_main_name').val() != '') {
+            if ($('#id_save_image').is(':checked')) {
+                // Construct the SVG URL
+                const svgUrl = `https://dicebear-7227ab440045.herokuapp.com/9.x/pixel-art/svg?seed=${seed}&accessoriesProbability=${accessory}&beardProbability=${facial_hair}&glassesProbability=${eye_sight}&hatProbability=${headgear}`;
 
-                    const downloadLink = document.createElement('a');
-                    downloadLink.href = blobUrl;
-                    downloadLink.download = document.getElementById('id_main_name').value + '.svg'; // Set the download filename
-                    document.body.appendChild(downloadLink);
-                    downloadLink.click();
-                    document.body.removeChild(downloadLink);
-                }
+                // Fetch the SVG data, download it, and submit the form after fetch completes
+                fetch(svgUrl)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.text();
+                    })
+                    .then(svgText => {
+                        const svgBlob = new Blob([svgText], { type: 'image/svg+xml' });
+                        const blobUrl = URL.createObjectURL(svgBlob);
 
-                // Get the src attribute of the img element with id="avatar"
-                const imgSrc = $('#avatar').attr('src');
-                console.log(imgSrc);
-                // Set the value of the input field named "url" to imgSrc
-                $('input[name=url]').val(imgSrc);
-                document.forms[0].submit();
-                $('#form').submit();
-            } else if (total == 100 != 100 && $('#id_main_name').val() != '') {
-                alert("Please ensure the total score for the features adds up to 100.");
+                        const downloadLink = document.createElement('a');
+                        downloadLink.href = blobUrl;
+                        downloadLink.download = $('#id_main_name').val() + '.svg'; // Set the download filename
+                        document.body.appendChild(downloadLink);
+                        downloadLink.click();
+                        document.body.removeChild(downloadLink);
+
+                        // Set the value of the input field named "url" to svgUrl
+                        $('input[name=url]').val(svgUrl);
+
+                        // Submit the form after download
+                        document.forms[0].submit();
+                    })
+                    .catch(error => {
+                        console.error('Error downloading the SVG:', error);
+                    });
             } else {
-                alert("Please give your character a name to continue.");
+                // If the checkbox is not checked, submit the form immediately
+                document.forms[0].submit();
             }
-        });
-    </script>
+        } else if (total != 100 && $('#id_main_name').val() != '') {
+            alert("Please ensure the total score for the features adds up to 100.");
+        } else {
+            alert("Please give your character a name to continue.");
+        }
+    });
+</script>
+
 
 
     <script>

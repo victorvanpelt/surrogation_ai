@@ -162,9 +162,8 @@
 
             if ($('#gen_check').val() == 1 && $('#id_main_name').val() != '') {
                 if ($('#id_save_image').is(':checked')) {
-                    const svgElement = document.getElementById('avatar');
                     const serializer = new XMLSerializer();
-                    const svgBlob = new Blob([serializer.serializeToString(svgElement)], {type: 'image/svg+xml'});
+                    const svgBlob = new Blob([serializer.serializeToString(document.getElementById('avatar'))], {type: 'image/svg+xml'});
                     const blobUrl = URL.createObjectURL(svgBlob);
 
                     const downloadLink = document.createElement('a');
