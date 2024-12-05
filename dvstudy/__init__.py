@@ -33,7 +33,7 @@ class C(BaseConstants):
     MODEL = "gpt-4o"
 
     ## set character prompt. According to openAI's documentation, this should be less than ~1500 words
-    CHARACTER_PROMPT_A = """ Never use any markdown or formatting in your answers."""
+    CHARACTER_PROMPT_A = """ Never use any markdown or other formatting in your answers. You type your answers as if you're typing a text message."""
 
     ## Set how many requests users can make
     maximum_requests = 30
@@ -533,7 +533,6 @@ class Choice2(Page):
         'headgear',
         'chatLog',
         'main_name',
-        'gen_check',
         'url',
         'save_image'
     ]
@@ -549,7 +548,6 @@ class Choice2(Page):
         fixed_fields = [
             'chatLog',
             'main_name',
-            'gen_check',
             'url',
             'save_image'
         ]
@@ -684,11 +682,11 @@ class Final(Page):
 
 
 page_sequence = [
-    Welcome,
-    Introduction1,
-    Introduction2,
-    Introduction3,
-    Introduction4,
+    # Welcome,
+    # Introduction1,
+    # Introduction2,
+    # Introduction3,
+    # Introduction4,
     Choice,
     Choice2,
     Peq_intro,
