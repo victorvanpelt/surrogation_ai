@@ -682,11 +682,11 @@ class Final(Page):
 
 
 page_sequence = [
-    # Welcome,
-    # Introduction1,
-    # Introduction2,
-    # Introduction3,
-    # Introduction4,
+    Welcome,
+    Introduction1,
+    Introduction2,
+    Introduction3,
+    Introduction4,
     Choice,
     Choice2,
     Peq_intro,
