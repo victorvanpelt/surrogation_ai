@@ -2,18 +2,18 @@ from os import environ
 
 
 SESSION_CONFIGS = [
-     dict(
-         name='chatGPT',
-         app_sequence=['chatGPT'],
-         num_demo_participants=2,
-         prompt=""
-     ),
-    dict(
-        name='Surrogation',
-        app_sequence=['surrogation'],
-        num_demo_participants=2,
-        surrogation="",
-    ),
+    #  dict(
+    #      name='chatGPT',
+    #      app_sequence=['chatGPT'],
+    #      num_demo_participants=2,
+    #      prompt=""
+    #  ),
+    # dict(
+    #     name='Surrogation',
+    #     app_sequence=['surrogation'],
+    #     num_demo_participants=2,
+    #     surrogation="",
+    # ),
     dict(
         name='dvstudy_experiment_one',
         app_sequence=['dvstudy'],
